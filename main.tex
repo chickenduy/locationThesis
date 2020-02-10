@@ -1,13 +1,8 @@
 \RequirePackage[l2tabu,orthodox]{nag}
-
-% TODO: decide if one-sided/two-sided
-%\documentclass[headsepline,footsepline,footinclude=false,fontsize=11pt,paper=a4,listof=totoc,bibliography=totoc,BCOR=12mm,DIV=12]{scrbook} % two-sided % original source stated: BCOR=12mm,DIV=12
 \documentclass[headsepline,footsepline,footinclude=false,oneside,fontsize=11pt,paper=a4,listof=totoc,bibliography=totoc,DIV=12]{scrbook} % one-sided
 
-% TODO: change citation style in settings
 \input{settings}
 
-% TODO: change thesis information
 \newcommand*{\getUniversity}{Technische Universität München}
 \newcommand*{\getFaculty}{Department of Informatics}
 \newcommand*{\getTitle}{Developing a Scalable, Secure, and Privacy-preserving Platform for Collection, Aggregation, and Analysis of Mobility Data}
@@ -19,9 +14,37 @@
 \newcommand*{\getSubmissionDate}{15.03.2020}
 \newcommand*{\getSubmissionLocation}{Munich}
 
+\usepackage{multicol}
+\usepackage{listings}
+\usepackage{xcolor}
+ 
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+ 
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+\lstset{style=mystyle}
+
 \begin{document}
 
-% TODO: decide on used language
 %\selectlanguage{ngerman}
 \selectlanguage{english}
 
@@ -43,8 +66,8 @@
 
 \input{chapters/01_introduction}
 \input{chapters/02_related_work}
-\input{chapters/03_methodology}
-\input{chapters/04_design}
+\input{chapters/03_design}
+\input{chapters/04_implementation}
 \input{chapters/05_evaluation}
 \input{chapters/06_conclusion}
 

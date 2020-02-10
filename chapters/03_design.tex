@@ -1,0 +1,38 @@
+% !TeX root = ../main.tex
+% Add the above to each chapter to make compiling the PDF easier in some editors.
+
+\chapter{Design}\label{chapter:design}
+\section{Trust, Usability and Anonymity}
+In any platform, we expect a certain level trust from each participant, may it be from the service provider or the service consumer. How this trust is created can have many different sources. But the main reason a person or organization can be trusted is accountability. Companies that have a strong market presence can be trusted because they have been present for a longer period of time and they can't just disappear over night, thus they can be held accountable for their actions. Today, Microsoft, Google, Amazon and Facebook for instance, are trusted to a certain degree. But this trust is not invulnerable. Trust can be damaged by hiding important information. Keeping the public from being notified about severe data breaches and selling sensitive data to third parties without their knowledge and permission has strained the public trust in recent years.
+% Todo: \cite[Facebook Cambridge Analytica]
+
+On the other hand, we as consumers require privacy. If we can guarantee anonymity however, we can also guarantee privacy, as re-identification should be impossible at that point.
+% Todo: \cite[Dictionary]
+As chapter 2 has shown, it is a hard task to anonymize big data sets, as quasi-identifiers can be used to reconstruct data using linking attacks. So one way to achieve anonymity, would be to strip away all attributes that could be used in another data set.
+
+Here we hit a wall with the usability of the data itself. Cynthia Dwork says "de-identified data isn't",
+% Todo: \cite[Cynthia Dwork]
+meaning that either that the data itself is not de-indentified because of possible reconstruction or the data is not data anymore because it is not useful for analysis. Data itself is only as useful as its relationships.
+
+So there is a need to find a way to find a balance between trust, usability and anonymity. As trust research itself is a very broad subject, we'll focus on the anonymity of the crowd and usability of their collected data.
+
+\section{Different Design}
+As discussed before, there are advantages and disadvantages to a centralized or decentralized or distributed system. We explore how we can implement one of the choices and if they would be feasible in a theoretical point of view.
+\subsection{Simon van Endern}
+The chosen architecture implemented in his thesis by Simon van Endern was with a centralized approach with a distributed storage solution. The model can be seen in figure [X].
+% Todo: Insert figure 
+In his proposal, he eliminates the need for a central database, by collecting and storing raw data directly on the crowds's smartphone, creating a distributed database. This gives each participant a lot of control over their own data, just by deleting the application they can opt-out of future data analyses.
+
+His original idea, the mobile phones would use peer-to-peer technology to forward the aggregation request and finally send the data to the server. But because of the lack of available technology, he opted to use the central server as an intermediary to send from mobile phone to mobile phone. To keep the data confidential and ensure anonymity from the server, he uses RSA and AES encryption. To forward the data to the next device, he implemented a polling solution. The application periodically polls the server for a new aggregation request targeted at the device. If one is present, it fetches the request over the REST API and after adding its own data posts it to the server.
+
+In the finite scope, he managed to implement three aggregation types:
+\begin{itemize}
+	\item Average number of steps of a day over all participants. 
+	\item Average time spent on an activity (walking, running, in a vehicle or on a bicycle).
+	\item Average number of steps of a participant during the test period. 
+\end{itemize}
+
+In his implementation, we see a few flaws, that we try to improve in this thesis. 
+
+\subsection{Expanded Approach}
+Simon van Endern's original idea as is can't be scaled because of the nature of its forwarding chain. Adding \textit{n} new devices creates a linear time complexity of \(\mathcal{O}(n)\) and space complexity of \(\mathcal{O}(nˆ2)\). 

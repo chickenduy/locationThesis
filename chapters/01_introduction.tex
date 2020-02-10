@@ -2,7 +2,46 @@
 % Add the above to each chapter to make compiling the PDF easier in some editors.
 
 \chapter{Introduction}\label{chapter:introduction}
-Use with pdfLaTeX and Biber.
 \section{Motivation}
+
+There are currently round 7.7 billion people living on earth with a declining growth rate at currently 1.1 percent per year. The UN is predicting that the population growth is going to be sinking steadily in the next decades, but despite that, the population is increasing until 2100. They estimate that the earth will hit 10.9 billion at the end of the century 2100.
+% Todo: \cite[UN Population Facts]
+
+It is inevitable, that big cities and metropoles around the globe are growing denser year by year.
+According to the United Nations, urban areas around the globe have been growing denser year by year. While the same can be said for rural areas because of the general growth rate of the population, the influx of people moving into big cities is much higher compared to the countryside.
+% Todo: \cite[Population Growth in the World's Largest Cities]
+% Todo: \cite[UN Interactive Data: Annual Urban Population at Mid-Year (thousands)]
+% Todo: \cite[UN Interactive Data: Annual Rural Population at Mid-Year (thousands)]
+% Todo: \cite[UN Interactive Data: Average Annual Rate of Change of the Urban Population (per cent)]
+% Todo: \cite[UN Interactive Data: Average Annual Rate of Change of the Rural Population (per cent)]
+Depending on how certain factors evolve over time, such as climate change, autonomous driving and other technology, it could decelerate or even accelerate growth.
+
+To solve issues stemming from the increase in housing, traffic and infrastructure, urban planning is one of the most important tools. Improving traffic control requires knowledge of the traffic flow and inefficiencies that are causing traffic jams. Knowing local population trends, movement patterns and other factors could benefit planning housing and energy infrastructure. There are only a handful of companies that hold the monopoly on the much needed data, but acquiring them is expensive and cause problems with data protection laws. Publicizing the data without anonymizing it, severely infringes on the privacy of the originator of the data. But the sole act of anonymizing the data is not enough. The use of inference attacks may make it possible to associate data and re-identify the individual as L. Sweeney has proven.
+% Todo: \cite[k-Anonymity/ A Model for Protecting Privacy]
+
+To solve this, we can leverage the widespread availability of mobile computing power, and create a platform that provides the data on a need-to-know basis. Today, most smartphones are equipped with several sensors, including a GPS sensor, pedometer and accelerometer, which can be used to collect mobility data. Many applications are utilizing those sensors to implement location based services and games, for instance Uber and Pokemon GO, but there is a lot of controversy around products of that kind. "If you're not paying, you're the product" is a quote that is often said around data driven applications.
+% Todo: \cite[https://www.nytimes.com/2018/04/08/us/facebook-users-data-harvested-cambridge-analytica.html]
+% Todo: \cite[https://www.ted.com/talks/zeynep_tufekci_we_re_building_a_dystopia_just_to_make_people_click_on_ads]
+% Todo: \cite[https://arstechnica.com/tech-policy/2018/04/steve-wozniak-leaves-facebook-the-profits-are-all-based-on-the-users-info/]
+% Todo: \cite[https://gadgets.ndtv.com/internet/news/tim-cook-to-google-users-youre-not-the-customer-youre-the-product-594242]
+It applies to a lot of free services offered in exchange for your data. Google Maps, for example, provides a free navigation service, whilst collecting your sensory data, such as GPS and accelerometer, to collect traffic information. Facebook provides a free social media platform for people to connect, while using it to sell targeted advertisement using your data.
+
+So publicizing big anonymous data sets has its limits and data collection itself is a hot topic in today's media. 
+
 \section{Research Questions}
+We try to find a balance between the usability of data, the privacy preservation of the user and the trust between the participants.
+\subsection*{RQ1: What are the benefits and drawbacks in Simon van Endern's architecture?}
+We examine his result and analyze his architecture. Something about weakpoints.
+\subsection*{RQ3: What improvements are possible?}
+His work shows a minimal viable product on which we can expand further investigations. We investigate what further data can be aggregated and how the original architecture can be improved both in security and scalability.
+\subsection*{RQ4: Is it feasible to create a decentralized mobile network for the purpose of aggregating data?}
+There has been a lot of advancement in decentralization and we look into possible frameworks than can be implemented to enable a decentralized network.
+\subsection{RQ5: Is it possible to remove trust?}
+
 \section{Contributions}
+
+We will reexamine the results found by Simon van Endern and while focusing on the scalability of the crowdsourcing platform and the privacy analysis of aggregation for more speciﬁc mobility data, we will expand on his original idea.
+% Todo: \cite[Simon van Endern]
+% Todo: write more content
+
+First, we will review related work concerning risks and solution to sensitive data and pertinent anonymization techniques. After that, we will propose our approach to solve the mentioned problems. In chapter 4, we explain our implementation approach and decisions. Chapter 5 documents our test setup and evaluate our results. Lastly, we will draw a conclusion on our work and discuss further improvements.
