@@ -2,9 +2,76 @@
 % Add the above to each chapter to make compiling the PDF easier in some editors.
 
 \chapter{Performance and Evaluation}\label{chapter:evaluation}
-\section{Test Environment}
-\section{Performance}
-\subsection{Accuracy}
+\section{Field Test}
+To deploy our project in the field, we used IBM Cloud's free hosting service to run our node.js server and connect it to our aforementioned MongoDB Atlas instance. We tested the system over the course of eight days from Wednesday, the 29.01.20 to Wednesday, the 05.02.20. To find participants, we asked friends, acquaintances and tried to recruit people in the vicinity and over private social media channels, but unfortunately, because of privacy concerns, we only found 13 volunteers to participate in the trial, of which only 5 to 7 devices were available over the whole test period. Because of Android's own battery management system and other OEM's aggressive battery saving algorithms, a lot of devices were not reachable after they have been unused for longer period of time, entering Doze mode. Additionally, most of our users were fragmented globally and with the low number of active participating devices, we had to adapt our aggregation parameters. To start aggregation processes, we use Postman, a tool for sending among others REST requests directly to an address.
+% Todo: \cite[Postman]
+
+We started with aggregating similar data to Simon van Endern, such as steps data and activities data and afterwards, we looked into location data and presence data. The collected data set can be found in the Git repository [X] and partially in the the sections below.
+% Todo: \cite[Git repository] upload json
 \subsection{Data Consumption}
-\section{Privacy Evaluation}
-\subsection{Collected Data}
+Running the application by itself shouldn't require a lot of data, as the only data consumption only comes from the initial registration request to the server, the periodical ping to the push service and the aggregation requests. We let the application run for the first few days and aggregated data irregularly starting after the 29.01.20. But most of the requests were sent towards the end of the field test, on the 05.02.20 and the 06.02.20. In table [X], the distribution of the aggregation can be seen. We were able to request prove of data consumption from 4 participants, but are only able to confirm that some of them were actively providing data in requests. The provided screenshots can be viewed in the Appendix and consumption is shown in table [X]. 
+% Todo: insert table for request distribution
+% Todo: insert table for data consumption
+We can see in all cases that data consumption didn't exceed 10MB and in most cases didn't even use more than 5MB. We could extrapolate, that the consumption of data should not be a lot more than twice depending on the number of aggregation requests sent because the parallelization of the data collection should always aim for small groups.
+
+\subsection{Results}
+We sent more than a hundred aggregation requests during the field test and collected the average number of steps taken and the average time spent on the activities still, walking, biking and in a vehicle. The start and end date parameters for aggregating these types were to 12:00 am JST for each day. We also requested for location and presence of the devices over the globe at 12:00 pm CET and 12:00 pm JST, 11:00 am and 3:00 am in the GMT time zone respectively. Each aggregation had consistently from 3 to 7 participants.
+
+We started with aggregating steps with around 5 to 7 participants being online according to our push service. The average number of steps we recorded, range from 7323 to 11362 with 3 to 4 users contributing to the data as the rest were did either not have an internet connection or no pedometer built-in. For the participants, we have a span from 0 to 21128 steps in a day. The data is visualized in figure [X].
+% Todo: insert figure
+% Todo: describe the all the data collected and insert figures
+% Todo: inconsistency because of epoch time difference
+
+We recorded the average time spent motionless was from 577 to around 1106 minutes. For individual participants we have a wide gap with a minimum of 0 and a maximum of 1310 minutes, almost 22 hours, spent still, as depicted in figure [X]. This can be explained on the basis that for counting activities, we only use finished activities that have a start and an end timestamp. For the two cases, it was highly probable that the phone hasn't been used touched for two full days and thus the start date of the activity was before the 31.01.20 and and the end after the 01.02.20. For the low values of 16 minutes and 28 minutes, we have not found an explanation. 
+% Todo: insert figure
+
+As for walking, figure [X] shows a mean time between 25 and 75 minutes, from participants only walking 2 minutes up to 158 minutes. Without having the running time at hand, it is possible to infer, that with the high number of steps recorded on half of the days, that one person is running regularly if the steps can be assigned to the same user.
+% Todo: insert figure
+
+On average, the participant uses a vehicle up to 106 minutes. On occasion many users don't use any transportation at all. Figure [X] shows the data a user spent in a vehicle. Registered activities from 1 to 2 minutes are with high probability credited to escalators and elevators.  
+% Todo: insert figure
+
+For cycling, on some days we only had one value around 7 minutes. We can assume with confidence, that it is one specific participant that is using the bike on occasion.
+
+% Todo: write about the location data
+Now we take a look at the location and presence data. In the tables [X] and [X], we can see the GPS coordinates that we get after the server suppresses them for k-anonymity. We do this because there is a lot of information if only one person in a greater area is present. If we collect only spatially cloaked area in the vicinity and we do this for several time points, we can assume with great confidence, the general trajectory of that user posing a risk to privacy.
+% Todo: insert table
+
+According to the aggregated data, we have 2 to 7 participants over the course of the field test. Table [X] shows location at 12pm JST and table [X] at 12pm CET which corresponds to 4am CET and 8pm JST in the other time zone. As already mentioned before, because of the fragmented participant pool, we set the desired location at any GPS coordinates, but the range to 50,000km and the accuracy to 0, which results in gives us a rough estimate in a 111km range. 
+
+At 12pm JST or 4am CET, we have only 2 devices located in the greater Munich area with a mid point of \((48.50108260577674, 11.495067909974292)\) which corresponds to the territory covered by \(\langle(48, 11),(49, 12)\rangle\). On the 30th and 31st of January, we detected 3 devices in the same region and additionally 2 participants close to \((35.50103138028429, 139.49688751384306)\) which represents the space between \(\langle(35, 139),(36, 140)\rangle\). For the rest of the field test, we can determine 2 devices in the general area of Munich and 2 in Tokyo most of the time.
+
+As for the aggregation at 12pm CET or 8pm JST, we get similar results with 3 devices in the greater Munich area and also 3 devices in the proximity of Tokyo for 4 days. On the 30.01.20, we only see 2 users the area covered by \(\langle(35, 139),(36, 140)\rangle\) and on the 05.02.20, we only see 2 users between \(\langle(48, 11),(49, 12)\rangle\).
+
+Figure [X] and [X] depict the areas that are spanned by their corner points, for Munich and Tokyo respectively. 
+% Todo: insert figure
+
+
+\subsection{Privacy Evaluation}
+After collecting the data, we analyze it for privacy issues. We first put the steps data and activity data under the microscope, then we tear down the location and presence information. Examining possible reconstruction, linking or tracing attacks.
+
+\subsubsection{Raw Values of Steps and Activities}
+Looking at the steps and the activities, we don't see any vulnerability in linking attacks as there are not a lot of possible quasi-identifiers to connect. Being able to connect temporal similarities would be a potential vulnerability. Steps data is collected over the course of the whole day, but could also be modified to use a certain time frame instead. But the issue is, that all delivered data from every device has the same time data they get from the request. The same applies to activities. As every query by itself is a statistical database, without any quasi-identifiers it is improbable to achieve a linking attack. 
+Tracing attacks however can be used to possibly identify if a user is used in the query. Taking the gathered steps data, with auxiliary data as knowing the exact number of steps a person took, we can infer, that the person has participated in the aggregation request with a high chance. But because our data collection architecture has a possibility, that a person doesn't provide data, there is a plausible deniability. Scaling the number of participants up, would result in a normal distribution of the mobility data as shown by T. Althoff et al. And with a lot of possible users, inferring if one has participated even if we are able to match the number of steps to exactly one value in the query result, we are unable to guarantee the user took part. We think, we can assure privacy with the raw values, the same as Simon van Endern promised privacy for median values.
+% Todo: \cite[Large-scale physical activity data reveal worldwide activity inequality]
+
+\subsubsection{Location and Presence}
+
+As for the more specific mobility data, we can't built any connections to the other data with confidence. We are incapable of linking our location or presence to steps or activities without auxiliary data. By suppressing unique locations, that could show individuals, we have a k-anonymous data set. But the same problems apply to it as for steps and activities. Missing quasi-identifiers make it hard to re-identify the devices that the data came from. 
+But in contrast to reconstruction or linking attacks, tracing attacks could be used. Because of the lack in participating devices, we are sure, that the it is the same people participating in the query. But with the low accuracy, we are unable to build any trajectories. In order to examine possible calculation of trajectories, we need more data and more accurate data.
+
+\section{Simulated Test}
+Because of the small sample size in our field test, we decided to run one more test in a more controlled environment for more reliable data. We use 10 Android Emulators on different versions using Android Studio. For ten minutes, each device generates location data along a predefined route in an interval of one second, totaling in 600 GPS coordinates. We simulate the travel speed with walking and cover a small area, so we can use a higher accuracy parameter. We then aggregate the location and presence data over the ten minutes for each minute. This gives us more data to evaluate privacy issues, especially concerning historical location data.
+
+\subsection{Results}
+\subsection{Privacy Evaluation}
+\subsubsection{Location and Presence}
+\subsubsection{Historical location data}
+\subsection{Usability}
+By stripping away all of the quasi-identifiers, we sacrifice a lot of possible usability in the data. But for the loss of value, we are able to preserve a lot of privacy and even provide anonymity for most cases. On one hand, we won't be able to use the collected data for detailed medical research that requires sex, age and other conditions, on the other hand however, we are able to gather population density data and activity data, which are very handy in urban planning.
+\subsection{Possible Improvements}
+We achieved a lot of scalability and a lot of privacy in our implementation, but there are still immediate improvements possible in both the application and the server. For the spatially cloaked location data, our design only applies static accuracy provided by the request itself. It may be possible to send different accuracies of the concealed areas and match them on the server to get smaller anonymizing regions and still maintain k-anonymity.
+
+The application could be tweaked to be able to handle multiple requests at the same time. Thus making data aggregation in general more efficient. The same applies to the server. At the moment it doesn't differentiate the messages it receives from the groups. 
+
+We also have an issue with the confirmation approach. This method is right now implemented using a sleeping thread that prepares to resend the data collected so far to the subsequent device after time out, but which in turn creates another sleeping thread. 

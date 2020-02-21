@@ -2,9 +2,30 @@
 % Add the above to each chapter to make compiling the PDF easier in some editors.
 
 \chapter{Conclusion}\label{chapter:conclusion}
+While it is hard to strike a balance between anonymity and usability, we think we found a starting point on which we can build for a more scalable, secure, and privacy-preserving platform for collecting, aggregating, and analyzing of mobility data.
 \section{Research Questions}
+\subsection*{RQ1: What are the benefits and drawbacks in Simon van Endern's architecture?}
+After reexamining, we found that Simon van Endern managed to collect useful data while preserving privacy. Additionally his idea provided a very secure communication infrastructure using a hybrid encryption scheme. His proposal however, isn't able to scale because of it, creating long wait times for data collection. Because of the single aggregation chain, the data consumption would grow quadratic and our current data plans can't carry that burden. The polling requests are also draining the battery whenever so slightly.
+Another flaw in the design is the selection process of the next device. Giving the server the ability to choose the following target, allows it to choose compromised users and endangering privacy. 
+
+\subsection*{RQ2: What improvements are possible?}
+We chapter 3, we proposed a few improvements and extend further data collection. To help aggregation, we changed the polling mechanism to a straightforward event-driven mechanism. Using a third party push notification service, we are able to send requests directly to the participating mobile phones instead of giving them the job to fetch the requests from the server, improving greatly on communication time. We also suggested to split the single aggregation chain into multiple groups, creating several smaller chains to collect the data instead of one long one, parallelizing the process and cutting down on collection time. 
+
+\subsection*{RQ3: Do the raw values for steps and activities infringe on privacy?}
+We added raw values to the aggregation of steps and activities as we saw no infraction on privacy by providing these values if there are enough participants. It is crucial to expand the number of users to a certain number to provide privacy because as long as the numbers are low, we are able to trace the contribution of a participant in an aggregation. At a certain point, the steps and activities data should take the form of a uniform distribution, which then hides the individual raw data inside the collected data set. 
+
+\subsection*{RQ4: Is it possible to query for more accurate location data while preserving privacy?}
+We found that similar to other types of data, the number of participants is vital to protect their identity or at least their association. 
+% Todo: about location tracking and spacial cloaking
+
+\subsection*{RQ5: Can we use the current state of P2P technology to remove intermediate third parties?}
+Chapter 4 has shown our attempts to implement P2P technology into the mobile application. We have identified Textile as viable candidate for our project, but unfortunately one of the most important aspects didn't meet our expectations. There is a lot of progress that technology, but some work still has to be done before it can be used in production. We should also look into decentralized communication standards, such as matrix, that can be used as an alternative to direct communication.
+% Todo: \cite[https://matrix.org/]
+
 \section{Limitations}
 \section{Future Work}
+\subsection{Mobile}
+\subsection{Server}
 \subsection{Additional Information}
 \subsection{Decentralization and Blockchain}
 \subsection{Reproducibility}

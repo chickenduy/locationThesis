@@ -2,62 +2,198 @@
 % Add the above to each chapter to make compiling the PDF easier in some editors.
 
 \chapter{Implementation}\label{chapter:implementation}
+
+The following sections describe the implementation and explain design decisions we made during development. 
+
 \section{Technology Stack}
 
-\begin{figure}[h]
-\begin{multicols}{4}
-\begin{lstlisting}
-{
-	"date": 0,
-	"lat": 0,
-	"lon": 0,
-	"radius": 0
-}
-\end{lstlisting}
-\columnbreak
-\begin{lstlisting}
-{
-	"type": 0,
-	"start": 0,
-	"end": 0,
-	"lat": 0,
-	"lon": 0,
-	"radius": 0
-}
-\end{lstlisting}
-\columnbreak
-\begin{lstlisting}
-{
-	"date": 0,
-	"accuracy": 0,
-	"anonymity": 0,
-	"lat": 0,
-	"lon": 0,
-	"radius": 0
-}
-\end{lstlisting}
-\columnbreak
-\begin{lstlisting}
-{
-	"start": 0,
-	"end": 0,
-	"lat": 0,
-	"lon": 0,
-	"radius": 1
-}
-\end{lstlisting}
-\end{multicols}
-\caption{helloworld.cpp}
-\end{figure}
+As our mobile platform, we have to decide between iOS and Android. While iOS has a more up-to-date operating system with 70\% of all of their mobile phones running iOS 13 and 23\% running iOS 12, Android has a much bigger market share with around 74\% compared to Apple's 25\%. 
+% Todo: \cite[https://www.statista.com/statistics/272698/global-market-share-held-by-mobile-operating-systems-since-2009/]
+% Todo: \cite[https://gs.statcounter.com/os-market-share/mobile/worldwide]
+In terms of available development kits and libraries, both platforms provide plenty of choice. In the end, we choose Android, mainly because of their ease of deployment on devices for test scenarios and as for programming language, we opt for Kotlin instead of Java because of their intuitive syntax and compact and more readable codebase.
 
-\section{Decentralized Approach}
+On the server side of development, we select Node.js using Typescript combined with MongoDB's cloud storage solution, Atlas. Node.js provides a lot of flexibility with its vast ecosystem of third party packages and MongoDB, as a NoSQL database, easily stores and combines any type of data, allowing quick changes in the data model.
+% Todo: \cite[https://nodejs.org/en/]
+% Todo: \cite[https://www.mongodb.com/cloud/atlas]
 
-\subsection{IPFS}
-\subsection{Limitations}
-\section{Centralized Approach}
-\subsection{First Approach}
-\subsection{Second Approach}
-\subsubsection{API}
-\subsubsection{NodeJS}
-\subsubsection{Android}
-\subsubsection{Benefits and Sacrifices}
+
+Our aggregation results can be fetched over the REST API or viewed directly in the MongoDB Atlas interface, given access privileges.
+
+\section{REST API}
+We use a REST API based on the JSON data exchange format and the endpoints are shown in table [X].
+% Todo: insert table
+
+The endpoints require authentication either as a researcher or as a data collecting user. For the researcher, we currently only create admin access by manually entering the username and password into the database. To register as users as a participants in the crowd, they have to send their id and their public key, as depicted in figure [X]. The server provides the participants with a random password for future authentication for sending the end result of their group.
+% Todo: insert figure
+
+\section{Aggregation API}
+
+To start an aggregation, table [X] shows that the users have to send their \textit{username} and \textit{password} for authentication, the \textit{requestType} they wants to aggregate (steps, activity, location or presence) and additional search options as \textit{request} depending on \textit{requestType} to the server. The search options are visualized in figure [X]: 
+%\begin{itemize}
+%	\item \textit{start} and \textit{end} or \textit{date}, time frame or point of interest
+%	\item \textit{lat} and \textit{lon}, coordinates of point of interest
+%	\item \textit{radius}, distance to the point of interest
+%	\item \textit{type}, type of activity as encoded in the Google Activity API
+%	% Todo: \cite[https://developers.google.com/android/reference/com/google/android/gms/location/DetectedActivity.html] 
+%	\item \textit{accuracy}, position after the comma to round for GPS accuracy
+%	\item \textit{anonymity}, number of k-anonymity for participants
+%\end{itemize}
+% Todo: insert figure
+% Todo: insert table for request
+
+%\begin{figure}[h]
+%\begin{multicols}{4}
+%\begin{lstlisting}
+%{
+%	"date": 0,
+%	"lat": 0,
+%	"lon": 0,
+%	"radius": 0
+%}
+%\end{lstlisting}
+%\columnbreak
+%\begin{lstlisting}
+%{
+%	"type": 0,
+%	"start": 0,
+%	"end": 0,
+%	"lat": 0,
+%	"lon": 0,
+%	"radius": 0
+%}
+%\end{lstlisting}
+%\columnbreak
+%\begin{lstlisting}
+%{
+%	"date": 0,
+%	"accuracy": 0,
+%	"anonymity": 0,
+%	"lat": 0,
+%	"lon": 0,
+%	"radius": 0
+%}
+%\end{lstlisting}
+%\columnbreak
+%\begin{lstlisting}
+%{
+%	"start": 0,
+%	"end": 0,
+%	"lat": 0,
+%	"lon": 0,
+%	"radius": 1
+%}
+%\end{lstlisting}
+%\end{multicols}
+%\caption{From left to right, additional information for \textit{steps}, \textit{activity},\textit{location} and \textit{presence}}
+%\end{figure}
+
+When the server receives an aggregation request of the described form, it will send out a more detailed request to the device groups for data collection. The message sent to the first mobile phones can be seen in table [X].
+% Todo: insert figure
+% Todo: insert table for message
+
+After receiving and adding their data, the phones encrypt the \textit{data} JSON object and forward a similar message as figure [X] to the next device in the list. After reaching the last, it sends the results back to the server. The message to the server contains the password generated on registration for authentication.
+
+The implementation of the different JSON formats are flexible and can accommodate more aggregation types. The next to sections will describe the process of aggregation more in depth from the Android device's and the server's point of view.
+
+\section{Android Application}
+As our target version of Android, we choose Android 10 (API level 29), which is currently the latest version of Android and as a minimum version, we select Android KitKat (API level 19). The latest report by Android shows, that around 98\% are on Android KitKat or later. To collect mobility data, we leverage the power of Google Play Services. For persistent storage, we make use of the Room Persistence Library. It provides an abstraction layer over SQLite and is commonly used in a lot of Android applications.
+% Todo: \cite[https://developer.android.com/topic/libraries/architecture/room]
+
+Because the platform relies on the generation of data from the crowd, the main functions of the application are the collection of mobility data and providing the data on request. Figure [X] describes the android applications with three main packages:
+% Todo: insert figure
+\begin{itemize}
+	\item \textit{User Interfaces}: This package handles the start of the application and the presentation of the stored data.
+	\item \textit{Background Services}: This starts all the processes in the background and manages all data and communications.
+	\item \textit{Data Storage}: This part stores and fetches all the collected data.
+\end{itemize}
+
+On start up, the application opens into the \textit{Main Activity}, where it asks the users for permission to access location services. On acceptance, the application starts the background services for data collection explained in the next section. It also serves the purpose of displaying stored data in the database. A screen for each type is implemented: steps, activities and GPS. Using Simon van Endern's Android application as blueprint, we implement the same features to keep our application running behind the scenes. Because of background limitations Android introduced with Android Oreo, we create a non-dismissible notification that is displayed in the status bar and the notification center. This turns the application into a foreground application, bypassing the limitations set in the newer Android versions. To keep user interaction to a minimum, we enable the application to reopen when it crashes or is closed and when it is rebooted.
+
+\subsection{Data Collection}
+After the users successfully accepts all permissions, the \textit{Main Activity} starts the \textit{Background Service}. The \textit{Background Service} in turn starts four tasks that have been shown in figure [X]. The four modules are loosely coupled and have been separated by data type or task at hand. We split the application into data collection and data aggregation. The aggregation process will be further explained in the next section. The data collection has three modules:
+\begin{itemize}
+	\item \textit{Steps Service}: This module handles two classes, the step service and the step logger. If the mobile phone has a pedometer, it registers the sensor to update the step count. The step logger receives steps from the sensor and stores it in the \textit{steps\_table} ever minute. Every step entry has an \textit{start} and \textit{end} timestamp and the number of steps taken in that time frame as \textit{steps}.
+	\item \textit{Activities Service}: This service, similar to the \textit{Steps Service}, is composed of the activities service and the activities logger classes. The activities service leverages the Google's Activity Recognition API to identify the current activity of the mobile device. We are only interested in the main activities: still, walking, running, on a bicycle or in a vehicle. Therefore, for all possible activities we register the transition type of entering or exiting the activity. Whenever we switch activities, the activities logger writes the \textit{timestamp}, the \textit{type} and wether we \textit{enter}ed or not into the \textit{activities\_table}. Additionally, we store the exited activity into the \textit{activitiesDetailed\_table} with the \textit{start} and \textit{end} timestamp and the \textit{type}.
+% Todo: \cite[https://developers.google.com/android/reference/com/google/android/gms/location/DetectedActivity]
+ 	\item \textit{GPS Service}: This part of the application has the same structure as the others described above. The GPS service accesses Google's Fused Location Provider API to collect location data. The API itself uses GPS sensor as well as the network sensors in the device to determine device location. We make the location sample rate dependent on the current activity because the positional changes between \textit{still} and \textit{on a bicycle} for example are very different. So we set the interval to 5 minutes for \textit{still}, 30 seconds for \textit{walking} and 15, 5 and once per second for \textit{running}, \textit{on a bicycle} and \textit{in a vehicle} respectively. Every once in a while, the GPS logger receives batches of data from the API and saves them into the \textit{gps\_table} with their  \textit{timestamp}, \textit{lat}itude and \textit{lon}gtitude.
+\end{itemize}
+
+\subsection{Aggregation}
+The last part of the background services is the \textit{Communication Service}. This is in charge of passing on data from the server or devices to the next target. For this interface we have several ideas in mind.
+ 
+\subsubsection{IPFS}
+To take out the central server as intermediary as implemented in Simon van Endern's version, we researched for libraries and SDKs that could be viable for our platform. We found the open-source projects, IPFS and libp2p, which are trying to be the foundation of the decentralized and distributed web. IPFS uses hashes to create content identifiers and turns them into blocks in a directed acyclic graph and to discover the peers with the content it uses a distributed hash table, using the modular P2P networking stack libp2p to communicate between nodes. 
+
+Textile leverages the strength of both technologies. Their main feature is threads, a hash-chain of blocks, that can represent any type of dataset, which we could use to send data directly from device to device. Unfortunately after further investigation, the Textile SDK is not viable in its current state because it is unable to keep the node in Android alive after going into the background or turning off the device screen.
+
+Thus we opted to instead use a third party push notification service to forward the messages between server and other devices.
+
+\subsubsection{Push}
+To replace Simon van Ender's polling with an event-based action architecture, figure [X] shows our new design. For our push service, we select Pushy
+% Todo: \cite[Pushy]
+% Todo: insert figure
+because of their free entry version and independence from big tech companies, as well as having implementations for both iOS and Android. We could also have used Firebase Cloud Messaging to forward messages. Of course, the modular architecture of the app enables to swap this method of communication for a P2P solution as soon as one proves viable.
+
+The complete communication infrastructure is handled by the communication service, communication receiver and communication handler. After starting the application, the \textit{Background Service} creates the communication service, that registers the device to the push service and receives a token for as identification. Then it generates a asymmetric RSA key pair and registers itself to our platform with the Pushy token as \textit{id} and the \textit{publicKey} over the REST API. As a reply, the mobile phone receives the random password for future authentication.
+
+The communication receiver works as the entry point for push notifications from the push service and adds data to the message. Upon receiving a aggregation request like in figure [X], it checks for an encryption and if required decrypts the data field depicted in figure [X]. The application then aggregates data according to the \textit{type} sent in the \textit{requestHeader}:
+\begin{itemize}
+	\item \textbf{steps}: We add up the number of steps from the start and end of the specified day and add it to the list of raw values.
+	\item \textbf{activities}: In this case, we sum up the time spent on the specified activity in the defined time frame and add that to the list of raw values.
+	\item \textbf{location}: Here, we look for locations with the closest timestamp to the date specified in the header, but also inside a reasonable time, i.e. 10 minutes to cover the fact that still activities only logs the GPS data every 5 minutes. Then we spatially cloak the GPS coordinates and add it to the list of raw values as the hidden GPS position.
+	\item \textbf{presence}: We just check all the GPS coordinates in the specified time frame, if they have been inside the range of the point of interest and add a 1 for if it has been and a 0 it hasn't.
+\end{itemize}
+
+After that, the communication handler takes the message and prepares it for the next participant in the \textit{group} array in \textit{requestOptions}. If the device was the last in the list, it sends the results to the server, otherwise it uses the hybrid encryption scheme to encrypt data with the credentials of the subsequent device. So the current device generates a symmetric AES key and encrypts the \textit{data} and afterwards does the same to the symmetric key with the public RSA key of the selected participant. Next, the communication handler forwards it over the push service, which in turn sends a push notification to the specified mobile phone.
+
+\subsubsection{Bypassing inactive users in the aggregation chain}
+In the case, that the aggregation is stuck because of any reason, for instance a device doesn't have an internet connection, it is turned off or the participant deleted the application, we have to be able to bypass the inactive mobile phone and select a new one.
+
+With our selected push notification service, the mobile phones periodically ping the the their  server, signaling that they are online and active. Using this information, we only send aggregation requests to the participants that are marked online by the push service bypassing devices, that have been offline and haven't contacted it service in a while. But it could also be the case, that the mobile phone isn't available after the aggregation already has started.
+
+So after the users forward their encrypted results to the following device, they start a sleeping thread, that will skip the next device and select the one after that. The subsequent user, that receives the message from the push service will aggregate the data as usual, but will send a short confirmation message back to the preceding participant, which cancels the sleeping thread. 
+
+By avoiding offline devices and actively confirming that a request has been fulfilled, we are able to bypass inactive users and make the aggregation more efficient and reliable.
+
+\subsubsection{Differential Privacy}
+
+\subsubsection{Spatial Cloaking}
+To be able provide k-anonymity for location data, we have to be able to generalize the GPS coordinates. By using spatial cloaking algorithms, we can hide the true position and generalize the whereabouts by assigning the user to an area. We consider using Casper, Interval Cloaking or Hilbert Cloaking. We select a variant of the Interval Cloaking algorithm  by rounding down and rounding up the digit after the comma defined in \textit{accuracy} in the \textit{requestData} to create a general rectangular area. To conserve data, we calculate the midpoint between the left lower corner and right upper corner of the area as a representative. It is important to find a good value for \textit{accuracy} because a too high value would result in a high suppression rate and too low value in too general data. 
+% Todo: write about our spatial cloaking
+
+\subsubsection{Differential Privacy}
+We decide against the use of differential privacy for our use cases because of the main flaws that it provides.
+\section{Server}
+For our server, we are using Node.js,
+% Todo: \cite[https://nodejs.org/en/]
+on version 12.12.21 with the express middleware, a minimal web application framework.
+% Todo: \cite[https://expressjs.com/]
+Our MongoDB Atlas database instance
+% Todo: \cite[https://www.mongodb.com/cloud/atlas]
+receives data over the database communication module. The architecture can be seen in figure [X].
+% Todo: insert figure
+As our programming language, we select Typescript because of its versatility. As a superset of Javascript, it supports all Javascript libraries natively and allows for object-oriented programming paradigms. In addition, it provides optional typing and better code structure. But we transpile our Typescript code to Javascript code, to run the web server.
+
+When we start the server, \textit{app.ts} registers the routes desribed in table [X] and connects the database object to the cloud storage instance. All calls to MongoDB are handled over that object, while the route handler manages calls to the endpoints.
+
+\subsection{Registration}
+
+Upon starting the application, it registers to the server using the JSON shown in figure [X] over the \textit{/crowd} route. To update the latest timestamp, we also have an obsolete route \textit{/crowd/ping}, which has been replaced with the ping our push notification service already provides. But this route can be modified to ping the devices for their current status if another communication model is adapted.
+
+\subsection{Aggregation}
+
+We create one routes to which the researchers can send their aggregation requests. After receiving a JSON in the mentioned form in figure [X,X,X,X] in route \textit{/aggregationRequest}, the server will get all the devices, ping them using the push service, select all the available participants and calculate the groups. Before assigning the groups, we use the Fisher-Yates shuffle to mix the order of the users. We calculate group sizes depending on a designated minimal length, so the aggregation has enough members in each group for anonymity purposes, but small enough to stay efficient. After all that, the server sends the aggregation request to all groups using the push service.
+
+On request creation, the server creates a temporary aggregation object that stores the id, number of groups and how many it already has received. We have four additional routes for the final aggregation, \textit{/aggregationsteps}, \textit{/aggregationactivity}, \textit{/aggregationlocation} and \textit{/aggregationpresence}. They each manage the POST requests from the Android devices and calculate data or ensure anonymity.
+
+\subsection{Anonymity}
+
+To achieve privacy with data as sensitive as whereabouts, we use k-anonymity. For steps and activity, we don't see immediate privacy issues and thus refrain from using k-anonymity as that would needlessly lower the usability of the data without benefits. As opposed to location data, we merge the received spatially cloaked raw values and suppress all coordinates that don't fulfill the defined k. 
+
+\section{Limitations}
+Even with the proposed solutions, the architecture is still far from perfect. While the data should be confidential because of the state-of-the-art encryption, we still have to rely on a third party to deliver messages, making us dependent on their availability.
+
+With Simon van Endern's aggregation chain, the most vulnerable participants would be the first because next in line would always be able to see the raw data they added. Unfortunately, homomorphic encryption is computationally very expensive and there are currently no available libraries for Android to implement this encryption scheme. Another possible solution would be to add dummy data for each group and remove it afterwards, so that the subsequent devices can't discern the real data of the first participant from the decoy
+ data.
+
+Another issue, that can lead to privacy issues is the centralization. While the raw data itself is distributed, the control over aggregated data, its storage and its collection is still under one central authority.
