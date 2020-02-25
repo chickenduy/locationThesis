@@ -193,7 +193,6 @@ To achieve privacy with data as sensitive as whereabouts, we use k-anonymity. Fo
 \section{Limitations}
 Even with the proposed solutions, the architecture is still far from perfect. While the data should be confidential because of the state-of-the-art encryption, we still have to rely on a third party to deliver messages, making us dependent on their availability.
 
-With Simon van Endern's aggregation chain, the most vulnerable participants would be the first because next in line would always be able to see the raw data they added. Unfortunately, homomorphic encryption is computationally very expensive and there are currently no available libraries for Android to implement this encryption scheme. Another possible solution would be to add dummy data for each group and remove it afterwards, so that the subsequent devices can't discern the real data of the first participant from the decoy
- data.
+With Simon van Endern's aggregation chain, the most vulnerable participants would be the first because next in line would always be able to see the raw data they added. Unfortunately, homomorphic encryption is computationally very expensive and there are currently no available libraries for Android to implement this encryption scheme.
 
 Another issue, that can lead to privacy issues is the centralization. While the raw data itself is distributed, the control over aggregated data, its storage and its collection is still under one central authority.

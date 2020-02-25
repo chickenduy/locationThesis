@@ -21,20 +21,20 @@ So there is a need to find a way to find a balance between trust, usability and 
 As discussed before, there are advantages and disadvantages Simon van Endern's system and explore how we can implement improvements and if they would be feasible with the current state of the art or if another alternative has to be chosen.
 
 \subsection{Simon van Endern}
-The propsed architecture implemented in his thesis by Simon van Endern was with a centralized approach with a distributed storage solution. The model can be seen in figure [X].
+The proposed architecture implemented in his thesis by Simon van Endern was with a centralized approach with a distributed storage solution. The model can be seen in figure [X].
 % Todo: Insert figure 
 In his thesis, he eliminates the need for a central database, by collecting and storing raw data directly on the crowds's smartphone, creating a distributed database. This gives each participant a lot of control over their own data, just by deleting the application they can opt-out of future data analyses.
 
 His original idea, the mobile phones would use peer-to-peer technology to forward the aggregation request and finally send the data to the server. But because of the lack of available technology, he opted to use the central server as an intermediary to send from mobile phone to mobile phone. To keep the data confidential and ensure anonymity from the server, he uses RSA and AES encryption. To forward the data to the next device, he implemented a polling solution. The application periodically polls the server for a new aggregation request targeted at the device. If one is present, it fetches the request over the REST API and after adding its own data posts it to the server.
-
 In the finite scope, he managed to implement three aggregation types:
+
 \begin{itemize}
-	\item Average number of steps of a day over all participants. 
+	\item Average number of steps over the course of a day over all participants. 
 	\item Average time spent on an activity (walking, running, in a vehicle or on a bicycle).
 	\item Average number of steps of a participant during the test period. 
 \end{itemize}
 
-In his implementation, we see a few flaws, that we try to improve in this thesis. 
+We examined his work and discovered a few flaws that we might be able to improve. We will look into possible solutions to make the architecture more efficient, scalable, secure and privacy-preserving. 
 
 \subsection{Expanded Approach}
 Simon van Endern's original idea, as is, can hardly be scaled because of the nature of its forwarding chain. Adding \(n\) new devices creates a linear time complexity of \(\mathcal{O}(n)\) and space complexity of \(\mathcal{O}(n^2)\). For every device added, the aggregation takes up to an additional 15 minutes and the data fetched and sent is the data of all previous devices combined, making it quite a burden on participant's data plan. 
@@ -45,9 +45,8 @@ We also intend to implement differential privacy because ...
 % Todo: more about differential privacy
 
 Additionally to avoid unnecessary constant polling, we will explore some P2P frameworks that can send data directly to the next target device and cut down on forwarding delays.
-% Todo: insert figure
 
-To extend the aggregation options, we add the two following two types:
+In order to extend the aggregation options, we add the two following two types:
 \begin{itemize}
 	\item Number of participants that were at a location in a specific time period
 	\item General location of all participants in a location at a specific time
