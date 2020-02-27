@@ -17,8 +17,7 @@ We can see in all cases that data consumption didn't exceed 10MB and in most cas
 \subsection{Results}
 We sent more than a hundred aggregation requests during the field test and collected the average number of steps taken and the average time spent on the activities still, walking, biking and in a vehicle. The start and end date parameters for aggregating these types were to 12:00 am JST for each day. We also requested for location and presence of the devices over the globe at 12:00 pm CET and 12:00 pm JST, 11:00 am and 3:00 am in the GMT time zone respectively. Each aggregation had consistently from 3 to 7 participants.
 
-We started with aggregating steps with around 5 to 7 participants being online according to our push service. The average number of steps we recorded, range from 7323 to 11362 with 3 to 4 users contributing to the data as the rest were did either not have an internet connection or no pedometer built-in. For the participants, we have a span from 0 to 21128 steps in a day. The data is visualized in figure [X].
-% Todo: insert figure
+m% Todo: insert figure
 % Todo: describe the all the data collected and insert figures
 % Todo: inconsistency because of epoch time difference
 
@@ -61,9 +60,11 @@ As for the more specific mobility data, we can't built any connections to the ot
 But in contrast to reconstruction or linking attacks, tracing attacks could be used. Because of the lack in participating devices, we are sure, that the it is the same people participating in the query. But with the low accuracy, we are unable to build any trajectories. In order to examine possible calculation of trajectories, we need more data and more accurate data.
 
 \section{Simulated Test}
-Because of the small sample size in our field test, we decided to run one more test in a more controlled environment for more reliable data. We use 10 Android Emulators on different versions using Android Studio. We selected four small landmarks in a small area from which the devices travel from with one of the other landmarks as a destination. This will ensure, that we have devices have been alone and together over the test period. For 10 minutes, each device generates location data along a predefined route in an interval of one second, totaling in 600 GPS coordinates. We use the emulator's route simulation, which leverages Google's Map API, giving us travel speed of exactly 4.5km/h. The are we cover is small, so we can use a higher accuracy parameter. We then aggregate the location and presence data over the ten minutes for each minute/half minute. This gives us more data to evaluate privacy issues, especially concerning historical location data.
+Because of the small sample size in our field test, we decided to run one more test in a more controlled environment for more reliable data. We use 10 Android Emulators on different versions using Android Studio. We selected four small landmarks in a small area from which the devices travel from with one of the other landmarks as a destination. This will ensure, that we have devices have been alone and together over the test period. For 10 minutes, each device generates location data along a predefined route in an interval of one second, totaling in 600 GPS coordinates. We use the emulator's route simulation, which leverages Google's Map API, giving us travel speed of exactly 4.5km/h. We then aggregate the location data over the ten minutes for each minute and gather data using different accuracy parameters, giving us different approximate areas. This gives us more data to evaluate privacy issues, especially concerning historical location data.
 
 \subsection{Results}
+
+
 \subsection{Privacy Evaluation}
 \subsubsection{Location and Presence}
 \subsubsection{Historical location data}
