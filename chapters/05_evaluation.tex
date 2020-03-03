@@ -13,7 +13,7 @@ Running the application by itself shouldn't require a lot of data, as the only d
 
 \begin{figure}[htpb]
   \centering
-  \includegraphics[width=0.8\textwidth]{figures/Diagram_Requests.png}
+  \includegraphics[width=0.8\textwidth]{figures/diagram_requests.png}
   \caption{Simon van Endern's original architecture.} \label{fig:diagram_requests}
 \end{figure}
 
@@ -28,28 +28,28 @@ We sent more than a hundred aggregation requests during the field test. We colle
 % Todo: describe all the data collected and add figures
 % Todo: inconsistency because of the epoch time difference
 
-We recorded the average time spent motionless was from 577 to around 1106 minutes. For individual participants, we have a wide gap with a minimum of 0 and a maximum of 1310 minutes, almost 22 hours, spent still, as depicted in figure \ref{fig:Diagram_Still}. This can be explained on the basis that for counting activities, we only use finished activities that have a start and an end timestamp. For the two cases, it was highly probable that the phone hasn't been used touched for two full days, and thus the start date of the activity was before the 31.01.20 and the end after the 01.02.20. For the low values of 16 minutes and 28 minutes, we have not found an explanation. 
+We recorded the average time spent motionless was from 577 to around 1106 minutes. For individual participants, we have a wide gap with a minimum of 0 and a maximum of 1310 minutes, almost 22 hours, spent still, as depicted in figure \ref{fig:diagram_still}. This can be explained on the basis that for counting activities, we only use finished activities that have a start and an end timestamp. For the two cases, it was highly probable that the phone hasn't been used touched for two full days, and thus the start date of the activity was before the 31.01.20 and the end after the 01.02.20. For the low values of 16 minutes and 28 minutes, we have not found an explanation. 
 
 \begin{figure}[htpb]
   \centering
-  \includegraphics[width=0.8\textwidth]{figures/Diagram_Still.png}
-  \caption{Distribution of still raw values.} \label{fig:Diagram_Still}
+  \includegraphics[width=0.8\textwidth]{figures/diagram_still.png}
+  \caption{Distribution of still raw values.} \label{fig:diagram_still}
 \end{figure}
 
 As for walking, figure \ref{fig:Diagram_Walking} shows a mean time between 25 and 75 minutes, from participants only walking 2 minutes up to 158 minutes. Without having the running time at hand, it is possible to infer that with the high number of steps recorded on half of the days, that one person is running regularly if the steps can be assigned to the same user.
 
 \begin{figure}[htpb]
   \centering
-  \includegraphics[width=0.8\textwidth]{figures/Diagram_Walking.png}
-  \caption{Distribution of walking raw values.} \label{fig:Diagram_Walking}
+  \includegraphics[width=0.8\textwidth]{figures/diagram_walking.png}
+  \caption{Distribution of walking raw values.} \label{fig:diagram_walking}
 \end{figure}
 
 On average, the participant uses a vehicle for up to 106 minutes. On occasion, many users don't use any transportation at all. Figure \ref{fig:Diagram_Vehicle} shows the data a user spent in a vehicle. Registered activities from 1 to 2 minutes are with high probability credited to escalators and elevators.  
 
 \begin{figure}[htpb]
   \centering
-  \includegraphics[width=0.8\textwidth]{figures/Diagram_Vehicle.png}
-  \caption{Distribution of in vehicle raw values.} \label{fig:Diagram_Vehicle}
+  \includegraphics[width=0.8\textwidth]{figures/diagram_vehicle.png}
+  \caption{Distribution of in vehicle raw values.} \label{fig:diagram_vehicle}
 \end{figure}
 
 For cycling, on some days, we only had one value of around 7 minutes. We can assume with confidence that it is one specific participant that is using the bike on occasion.
@@ -65,8 +65,17 @@ At 12 pm JST or 4 am CET, we have only two devices located in the greater Munich
 
 As for the aggregation at 12 pm CET or 8 pm JST, we get similar results with three devices in the greater Munich area and also three devices in the proximity of Tokyo for four days. On the 30.01.20, we only see 2 users the area covered by \(\langle(35, 139),(36, 140)\rangle\) and on the 05.02.20, we only see 2 users between \(\langle(48, 11),(49, 12)\rangle\).
 
-Figure [X] and [X] depict the areas that are spanned by the corner points \(\langle(48, 11),(49, 12)\rangle\) and \(\langle(35, 139),(36, 140)\rangle\), for Munich and Tokyo respectively. 
-% Todo: insert figure
+Figure \ref{fig:acc0} depicts the areas that are spanned by the corner points for Munich and Tokyo. 
+
+\begin{figure}[!tbp]
+  \centering
+  \subfloat[Munich][Munich \(\langle(48, 11),(49, 12)\rangle\)]{\includegraphics[width=0.45\textwidth]{figures/acc0_m}\label{fig:acc0_m}}
+  \hfill
+  \subfloat[Tokyo][Tokyo \(\langle(35, 139),(36, 140)\rangle\)]{\includegraphics[width=0.45\textwidth]{figures/acc0_t}\label{fig:acc0_t}}
+  \caption{Spatial areas in Tokyo and Munich with an Accuracy of 0}
+  \label{fig:acc0}
+\end{figure}
+
 
 \subsection{Privacy Evaluation}
 After collecting the data, we analyze it for privacy issues. We first put the steps data and activity data under the microscope, and then we tear down the location and presence information. Examining possible reconstruction, linking, or tracing attacks.
@@ -85,16 +94,32 @@ But in contrast to reconstruction or linking attacks, tracing attacks could be u
 Because of the small sample size in our field test, we decided to run one more test in a more controlled environment for more reliable data. We use 10 Android Emulators on different versions of the operating system using Android Studio. We selected four small landmarks in a small area from which the devices travel from one of the other landmarks as a destination. This will ensure that we have devices that have been alone and together over the test period. For 10 minutes, each device generates location data along a predefined route in an interval of one second, totaling in 600 GPS coordinates. We use the emulator's route simulation, which leverages Google's Map API, giving us a travel speed of exactly 4.5km/h. We then aggregate the location data over the ten minutes for each minute and gather data using different accuracy parameters, giving us different approximate areas. This gives us more data to evaluate privacy issues, especially concerning historical location data.
 
 \subsection{Results}
-First, we chose an accuracy of 2 decimal places, which translates to real-world distances of around one kilometer. We were able to track 7-8 devices consistently in the areas depicted in figure [X]. The markers 1 and 2 span the area of \(\langle(35.54, 139.63),(35.55, 139.64)\rangle\) and the other two markers are \(\langle(35.53, 139.63),(35.54, 139.64)\rangle\). Table [X] shows how many devices were in which area at each time step. 
-% Todo: insert figure
+First, we chose an accuracy of 2 decimal places, which translates to real-world distances of around one kilometer. We were able to track 7-8 devices consistently in the areas depicted in figure \ref{fig:acc2}. The markers 1 and 2 span the area of \(\langle(35.54, 139.63),(35.55, 139.64)\rangle\) and the other two markers are \(\langle(35.53, 139.63),(35.54, 139.64)\rangle\). Table [X] shows how many devices were in which area at each time step. 
 % Todo: insert table
+
+\begin{figure}[htpb]
+  \centering
+  \includegraphics[width=0.5\textwidth]{figures/acc2}
+  \caption{Distribution of still raw values.} \label{fig:acc2}
+\end{figure}
+
 Because the region we specified is large, we can almost always find multiple devices in the area.
 
-For our next aggregation, we selected a precision of 3, which corresponds to roughly 100 meters. The data in table [X] reveals that we can find two mobile phones most of the time, with aggregations, in which we were able to find three devices or none at all. 
-% Todo: insert table
+\begin{figure}[htpb]
+  \centering
+  \includegraphics[width=0.5\textwidth]{figures/acc3}
+  \caption{Distribution of still raw values.} \label{fig:acc3}
+\end{figure}
 
-Finally, we send requests with an accuracy of 4 or 10 meters. In this scenario, we were almost unable to register any devices, except for minute 10. At this time point, we have two users that pass each other in \(\langle(35.5372, 139.6336),(35.5373, 139.6337)\rangle\) as seen in figure [X].
-% Todo: insert figure
+For our next aggregation, we selected a precision of 3, which corresponds to roughly 100 meters. The data in table [X] reveals that we can find two mobile phones most of the time, with aggregations, in which we were able to find three devices or none at all. The areas are visible in figure \ref{fig:acc3}.
+
+Finally, we send requests with an accuracy of 4 or 10 meters. In this scenario, we were almost unable to register any devices, except for minute 10. At this time point, we have two users that pass each other in \(\langle(35.5372, 139.6336),(35.5373, 139.6337)\rangle\) as seen in figure \ref{fig:acc4}.
+
+\begin{figure}[htpb]
+  \centering
+  \includegraphics[width=0.5\textwidth]{figures/acc4}
+  \caption{Distribution of still raw values.} \label{fig:acc4}
+\end{figure}
 
 \subsection{Privacy Evaluation}
 Looking at the documented results, we can see where devices meet each other. With low precision, we always register 3-4 users. Using k-anonymity, we are unable to find out more than the provided data. We only know the number of people present in a specific area. 

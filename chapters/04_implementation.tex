@@ -10,12 +10,12 @@ The following sections describe the implementation and explain the design decisi
 As our mobile platform, we have to decide between iOS and Android. While iOS has a more up-to-date operating system with 70\% of all of their mobile phones running iOS 13 and 23\% running iOS 12, Android has a much bigger market share with around 74\% compared to Apple's 25\%. 
 % Todo: \cite[https://www.statista.com/statistics/272698/global-market-share-held-by-mobile-operating-systems-since-2009/]
 % Todo: \cite[https://gs.statcounter.com/os-market-share/mobile/worldwide]
+
 In terms of available development kits and libraries, both platforms provide plenty of choices. In the end, we choose Android, mainly because of their ease of deployment on devices for test scenarios. As for programming language, we opt for Kotlin instead of Java because of their intuitive syntax and compact and more readable codebase.
 
 On the server-side of development, we select Node.js using Typescript combined with MongoDB's cloud storage solution, Atlas. Node.js provides a lot of flexibility with its vast ecosystem of third-party packages, and MongoDB, as a NoSQL database, easily stores and combines any type of data, allowing quick changes in the data model.
 % Todo: \cite[https://nodejs.org/en/]
 % Todo: \cite[https://www.mongodb.com/cloud/atlas]
-
 
 Our aggregation results can be fetched over the REST API or viewed directly in the MongoDB Atlas interface, given access privileges.
 
@@ -100,14 +100,19 @@ The implementation of the different JSON formats are flexible and can accommodat
 As our target version of Android, we choose Android 10 (API level 29), which is currently the latest version of Android, and as a minimum version, we select Android KitKat (API level 19). The latest report shows that around 98\% are on Android KitKat or later. To collect mobility data, we leverage the power of Google Play Services. For persistent storage, we make use of the Room Persistence Library, as it provides an abstraction layer over SQLite and is commonly used in a lot of Android applications.
 % Todo: \cite[https://developer.android.com/topic/libraries/architecture/room]
 
-Because the platform relies on the generation of data from the crowd, the main functions of the application are the collection of mobility data and providing the data on request. Figure [X] describes the android applications with three main packages:
-% Todo: insert figure
+Because the platform relies on the generation of data from the crowd, the main functions of the application are the collection of mobility data and providing the data on request. Figure \ref{fig:modules} describes the android applications with three main packages:
 
 \begin{itemize}
     \item \textit{User Interfaces}: This package handles the start of the application and the presentation of the stored data.
     \item \textit{Background Services}: This starts all the processes in the background and manages all data collection and communications.
     \item \textit{Data Storage}: This part saves and fetches all the collected data stored in the Room database.
 \end{itemize}
+
+\begin{figure}[htpb]
+  \centering
+  \includegraphics[width=0.8\textwidth]{figures/modules}
+  \caption{Distribution of still raw values.} \label{fig:modules}
+\end{figure}
 
 On starting up, the application opens into the \textit{Main Activity}, where it asks the users for permission to access location services. On acceptance, the application starts the background services for data collection explained in the next section. It also serves the purpose of displaying stored data. A screen for each type is implemented: steps, activities, and GPS. Using Simon van Endern's Android application as a blueprint, we implement the same features to keep our application running behind the scenes. Because of background limitations Android introduced with Android Oreo, we create a non-dismissible notification that is displayed in the status bar and the notification center. This turns the application into a foreground application, bypassing the limitations set in the newer Android versions. To keep user interaction to a minimum, we enable the application to reopen when it crashes or is closed, and when it is rebooted.
 
@@ -132,10 +137,15 @@ Textile leverages the strength of both technologies. Their main feature threads,
 Thus we opted to instead use a third-party push notification service as an intermediary to forward the messages between the server and other devices.
 
 \subsubsection{Push}
-To replace Simon van Ender's polling with an event-based action architecture, figure [X] shows our new design. For our push service, we select Pushy
+To replace Simon van Ender's polling with an event-based action architecture, figure \ref{fig:aggregation} shows our new design. For our push service, we select Pushy
 % Todo: \cite[Pushy]
-% Todo: insert figure
 because of their free entry barrier and independence from big tech companies, as well as having implementations for both iOS and Android. We could also have used Firebase Cloud Messaging to forward messages. Of course, the modular architecture of the app enables us to swap this method of communication for a P2P solution as soon as one proves applicable.
+
+\begin{figure}[htpb]
+  \centering
+  \includegraphics[width=\textwidth]{figures/aggregation}
+  \caption{Distribution of still raw values.} \label{fig:aggregation}
+\end{figure}
 
 The complete communication infrastructure is handled by the communication service, communication receiver, and communication handler. After starting the application, the \textit{Background Service} creates the communication service that registers the device to the push service and receives a token as identification. Then it generates an asymmetric RSA key pair and registers itself to our platform with the Pushy token as \textit{id} and the \textit{publicKey} over the REST API. As a reply, the mobile phone receives a random password for future authentication purposes mentioned previously.
 
@@ -160,7 +170,6 @@ By avoiding offline devices and actively confirming that a request has been fulf
 
 \subsubsection{Spatial Cloaking}
 To be able to provide k-anonymity for location data, we have to be able to generalize the GPS coordinates. By using spatial cloaking algorithms, we can hide the true position and hide the whereabouts by assigning the user to a rough area. We consider using Casper, Interval Cloaking, or Hilbert Cloaking. We select a variant of the Interval Cloaking algorithm by rounding down and rounding up the digit after the comma defined in \textit{accuracy} in the \textit{requestData} to create a cloaked rectangular area. To conserve data, we calculate the midpoint between the left lower corner and right upper corner of the area as a representative. It is important to find a good value for \textit{accuracy} because a too high value would result in a high suppression rate and too low value in too broad data. 
-% Todo: write about our spatial cloaking
 
 \subsubsection{Differential Privacy}
 We decide against the use of differential privacy for our use cases because of the main flaws that it provides. Our decision applies to both global and local differential privacy. On the one hand, global differential privacy provides accurate data representation, but the algorithm needs the real values of the data infringing on our privacy-preserving requirement. Local differential privacy, on the other hand, can provide privacy without the intermediate data collector because of its composition feature. A disadvantage that local differential privacy brings is the necessity for a large data set. Since the noise addition to every entry in the set creates a much higher total noise level than global differential privacy and a huge number of participants is needed to cancel that out. 
@@ -176,8 +185,14 @@ on version 12.12.21 with the express middleware, a minimal web application frame
 % Todo: \cite[https://expressjs.com/]
 Our MongoDB Atlas database instance
 % Todo: \cite[https://www.mongodb.com/cloud/atlas]
-receives data over the database communication module. The architecture can be seen in figure [X].
-% Todo: insert figure
+receives data over the database communication module. The architecture can be seen in figure \ref{fig:server}.
+
+\begin{figure}[htpb]
+  \centering
+  \includegraphics[width=0.5\textwidth]{figures/server}
+  \caption{Distribution of still raw values.} \label{fig:server}
+\end{figure}
+
 As our programming language, we select Typescript because of its versatility. As a superset of Javascript, it supports all Javascript libraries natively and allows for object-oriented programming paradigms. Also, it provides optional static typing and better code structure. But to run the server, we transpile our Typescript code to Javascript code to run the webserver.
 
 When we start the server, \textit{app.ts} registers the routes described in the table [X] and connects the database object to the cloud storage instance. All calls to MongoDB are handled over that object, while the route handler manages calls to the endpoints.
