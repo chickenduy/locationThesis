@@ -22,8 +22,14 @@ So there is a need to find a way to find a balance between trust, usability, and
 As mentioned before, there are advantages and disadvantages to Simon van Endern's system, and we explore how we can implement improvements and if they would be feasible with the current state of the art or if another alternative has to be chosen.
 
 \subsection{Simon van Endern}
-The proposed architecture implemented in his thesis was using a centralized approach with a distributed storage solution. The model can be seen in figure [X].
-% Todo: Insert figure 
+The proposed architecture implemented in his thesis was using a centralized approach with a distributed storage solution. The model can be seen in figure \ref{fig:simon_original}.
+
+\begin{figure}[htpb]
+  \centering
+  \includegraphics[width=0.8\textwidth]{figures/simon_original.png}
+  \caption{Simon van Endern's original architecture.} \label{fig:simon_original}
+\end{figure}
+
 In his thesis, he eliminates the need for a central database, by collecting and storing raw data directly on the users' smartphone, creating a distributed database. This gives each participant a lot of control over their own data, just by deleting the application they are able to opt-out of future data analyses.
 
 In his original idea, the mobile phones would use peer-to-peer technology to forward the aggregation requests and finally send the data to the server for publication. But because of the lack of available technology, he opted to use the central server as an intermediary to send from mobile phone to mobile phone. To keep the data confidential and ensure anonymity from the server, he uses RSA and AES encryption. To forward the data to the next device, he implemented a polling solution. The application periodically asks for a new aggregation request targeted at the device from the server. If one is present, it fetches the request over the REST API, and after adding its own data, it posts it back to the server targeting the next device.

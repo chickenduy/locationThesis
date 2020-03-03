@@ -40,8 +40,13 @@ To implement a secure platform that is not so vulnerable to the problems propose
 \subsection{Distributed and Decentralized}
 The dangers of data breaches originate from outside the companies as well as inside, and their cause range from poorly implemented security and lax security policies to human error. 
 % Todo: \cite[https://www.helpnetsecurity.com/2019/11/14/breaches-2019/]
-Figure [X] depicts two more alternatives in place of a centralized architecture: distributed and decentralized.
-% Todo: Insert figure
+Figure \ref{fig:comparison} depicts two more alternatives in place of a centralized architecture: distributed and decentralized.
+
+\begin{figure}[htpb]
+  \centering
+  \includegraphics[width=0.8\textwidth]{figures/comparison.jpg}
+  \caption{Comparison between different types of centralization.} \label{fig:comparison}
+\end{figure}
 
 When the internet was implemented as the Advanced Research Projects Agency Network (ARPANET) in 1969, it was a decentralized network of computers scattered across the United States. With the adoption of the TCP/IP in 1982, it became the internet, an interconnected network of networks.
 % Todo: \cite[TCP/IP Network Administration, 3rd Edition]
@@ -98,11 +103,22 @@ To achieve differential privacy, one basically adds noise to the data, but repla
 
 \subsubsection{Global Differential Privacy}
 
-If the noise function is applied to the entire aggregated raw data set, it is called global differential privacy. This works by using a noise function on the result of a query, as depicted in figure [X]. The advantage of this model is that the resulting data set is still very accurate, but on the downside, the whole raw data set has to be available to use this function.
-% Todo: insert figure
+If the noise function is applied to the entire aggregated raw data set, it is called global differential privacy. This works by using a noise function on the result of a query, as depicted in figure \ref{fig:global_diff}. The advantage of this model is that the resulting data set is still very accurate, but on the downside, the whole raw data set has to be available to use this function.
+
+\begin{figure}[htpb]
+  \centering
+  \includegraphics[width=0.8\textwidth]{figures/global_diff.png}
+  \caption{Illustration of a global differential data flow} \label{fig:global_diff}
+\end{figure}
 
 \subsubsection{Local Differential Privacy}
-Differential privacy can also be used on the entries of the data set. By running every entry through the mechanism, it creates a locally differentially private data set. The disadvantage of this method is the much higher noise, but in exchange, the raw data itself is protected and doesn't require trust.
+Figure \ref{fig:local_diff} shows that differential privacy can also be used on the entries of the data. By running every entry through the mechanism, it creates a locally differential private data set. The disadvantage of this method is the much higher noise, but in exchange, the raw data itself is protected and doesn't require trust.
+
+\begin{figure}[htpb]
+  \centering
+  \includegraphics[width=0.8\textwidth]{figures/local_diff.png}
+  \caption{Illustration of a local differential data flow} \label{fig:local_diff}
+\end{figure}
 
 A typical example of this is the coin toss. A survey asks a question that can be answered with a yes or no. The function would toss a coin and would answer the question honestly on heads and otherwise answer the question with a second coin toss, with heads resulting in yes and tails in no. 
 % Todo: Not used because of focus in actual location data and dif not suitable but useful for presence
