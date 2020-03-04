@@ -22,7 +22,7 @@ Big cities and metropoles around the globe are inevitably growing denser year by
 % Todo: \cite[UN Interactive Data: Average Annual Rate of Change of the Rural Population (percent)]
 Depending on how certain factors evolve, such as climate change, autonomous driving, and other technology and politics, it could decelerate or even accelerate growth.
 
-To solve issues stemming from the increased demand in housing, traffic, and infrastructure, urban planning is one of the most important tools. Improving traffic control requires knowledge of the traffic flow and inefficiencies that are causing traffic jams. Knowing local population trends, movement patterns, and other factors could benefit the planning of housing and energy infrastructure. There are only a handful of companies that hold the monopoly on the much-required data, but acquiring them is expensive and can cause problems with data protection laws. Publicizing the information without anonymizing it, severely infringes on the privacy of the originator of the data. But the sole act of anonymizing the data is often not enough. The use of inference attacks may make it possible to associate data and re-identify the individual, as L. Sweeney has proven.
+To solve issues stemming from the increased demand in housing, traffic, and infrastructure, urban planning is one of the most important tools. Improving traffic control requires knowledge of the traffic flow and inefficiencies that are causing traffic jams. Knowing local population trends, movement patterns, and other factors could benefit the planning of housing and energy infrastructure. There are only a handful of companies that hold the monopoly on the much-required data, but acquiring them is expensive and can cause problems with data protection laws. Publicizing the information without anonymizing it, severely infringes on the privacy of the originator of the data. But the sole act of anonymizing the data is often not enough. The use of inference attacks may make it possible to associate data and re-identify the individual, as Sweeney has proven.
 % Todo: \cite[k-Anonymity/ A Model for Protecting Privacy]
 
 To solve some of the issues, we can leverage the widespread availability of portable computing power, and create a platform that provides the data on a need-to-know basis. Today, most smartphones are equipped with several sensors, including a GPS sensor, pedometer, and accelerometer, which can be used to collect a wide variety of mobility data. Many applications are already utilizing those sensors to implement location-based services and games; for instance, Google Maps, Uber, and Pokemon GO. But there has been a lot of controversy around products of that kind. "If you're not paying, you're the product" is a quote that is often cited around data-driven applications.
@@ -34,16 +34,19 @@ It applies to a lot of free services offered in exchange for your data. Google M
 
 How they use your data is not in your control. So publicizing big anonymous data sets has its limits, and data collection itself is a hot topic in today's media. 
 
+Simon van Endern proposed a solution to return control over the data back to the users. He implemented a platform that used the power of crowdsourcing the data collection and aggregated the data on a central server on request.
+% Todo: \cite[Simon van Endern]
+
 \section{Research Questions}
-We try to find a balance between the usability of data, the privacy preservation of the data collecting user, and the trust between the servers and mobile devices.
+When collecting data, it is crucial to find a balance between its usability and the privacy of the collecting party. It is also important to keep in mind, that there has to be a level of trust in both the data collector and the data analyst.
 \subsection*{RQ1: What are the benefits and drawbacks in Simon van Endern's architecture?}
 We take a look at Simon van Endern's original idea and implemented architecture. We investigate both the advantages and disadvantages of his idea in regards to scalability, security, and privacy.
 % Todo: Something about weak points.
 \subsection*{RQ2: What improvements are possible?}
 His work shows a minimal viable product on which we can expand further. We search for possible ways to improve on his architecture and explore possible aggregations.
-\subsection*{RQ3: Do the raw values for steps and activities infringe on privacy?}
+\subsection*{RQ3: What information do the raw values for steps and activities reveal?}
 As Simon van Endern has shown, mean values expose less private information. We want to take a look into the raw data that makes up the mean values and analyze the privacy concerns regarding the distribution of the step values and activities values for the participants and if they can  be used to link to other data.
-\subsection*{RQ4: Is it possible to query for more accurate location data while preserving privacy?}
+\subsection*{RQ4: How much information does the aggregation of real location data expose?}
 Related work has shown that location data are very susceptible to leaking private information. We look into methods to disassociate the mobility data with the individual to provide anonymity while maintaining statistical relevance.
 % Todo: about location tracking and spacial cloaking
 \subsection*{RQ5: Can we use the current state of P2P technology to remove intermediate third parties?}
@@ -55,4 +58,4 @@ We will reexamine the results found by Simon van Endern, and we will expand on h
 % Todo: \cite[Simon van Endern]
 % Todo: write more content
 
-First, we will review related work concerning risks and solutions to sensitive data and pertinent anonymization techniques. After that, we will propose our approach to architecture to solve the mentioned problems. In chapter 4, we explain the details of our implementation and decisions. The next chapter documents our field test setup and evaluates our results. Finally, we draw a conclusion on our work and discuss further possible improvements and show how the project can be reproduced.
+First, we review related work concerning risks and solutions to sensitive data and pertinent anonymization techniques. After that, we examine Simon van Endern's original idea and his final implementation and expand on his architecture. We propose our approach to solve the  problems mentioned and increase the types of aggregation. Then, we explain the details of our implementation and the design decisions we made. In next chapter, we document our test setups and the deployment and evaluate our collected results for information leaks. Finally, we draw a conclusion on Simon van Endern's and our work and discuss further possible improvements and give instruction on how the project can be reproduced.

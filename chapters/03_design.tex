@@ -3,7 +3,7 @@
 
 \chapter{Design}\label{chapter:design}
 \section{Trust, Usability and Privacy}
-In any platform, we expect a certain level of trust from each participant, may it be from the service provider or its consumer. How this trust is created can have many different sources. But the main reason a person or organization can be trusted is because of accountability. Companies with a strong market presence have the public's trust since they have been present for a longer period of time and can't just disappear overnight
+In any platform, we expect a certain level of trust from each participant, may it be from the service provider or its consumer. How this trust is created can have many different sources. But the main reason a person or organization can be trusted is because of accountability. Companies with a strong market presence have the public's trust since they have been present for a longer period of time and ca not just disappear overnight
  Consequently, they can be held accountable for their actions. Today, Microsoft, Google, Amazon, and Facebook, for instance, are seen as trustworthy to a certain degree. But this trust is not invulnerable. Lies and secrecy can damage trust. Keeping the public uninformed about severe data breaches or selling sensitive data to third parties without their knowledge and permission has strained the public trust in recent years.
 % Todo: \cite[Facebook Cambridge Analytica]
 
@@ -44,17 +44,23 @@ In the finite scope, he managed to implement three aggregation types:
 We examined his work and discovered a few flaws that we might be able to improve on. We will look into possible solutions to make the architecture more efficient, scalable, secure, and privacy-preserving. 
 
 \subsection{Expanded Approach}
-Simon van Endern's original idea, as is, can hardly be scaled because of the nature of its forwarding chain. Adding \(n\) new devices creates a linear time complexity of \(\mathcal{O}(n)\) and space complexity of \(\mathcal{O}(n^2)\). For every device added, the aggregation takes up to an additional 15 minutes, and the data fetched and sent is the data of all previous devices combined, making it quite a burden on participant's data plan depending on their position in the chain. 
+Simon van Endern's original idea, as is, can hardly be scaled because of the nature of its forwarding chain. Adding \(n\) new devices creates a linear time complexity of \(\mathcal{O}(n)\) and space complexity of \(\mathcal{O}(n^2)\). For every device added, the aggregation takes up to an additional 15 minutes, and the data fetched and sent is the data of all previous devices combined, making it quite a burden on participant's data plan depending on their position in the chain.
 
-To make the architecture more scalable, we propose to parallelize these chains by building multiple groups for the aggregation, as shown in figure [X]. With \(m\) groups, adding \(n\) devices, now only creates a time complexity of \(\mathcal{O}(\dfrac{n}{m})\) and space complexity of \(\mathcal{O}((\dfrac{n}{m})^2)\). So choosing the right \(m\) would change linear and quadratic to constant potential growth. 
+Our first goal is to make the platform more efficient and scalable. We propose to parallelize the chains by building multiple groups for the aggregation, as shown in figure \ref{fig:aggregation}. Each chain in itself resembles the Simon van Endern's original idea in figure \ref{fig:simon_original}. With \(m\) groups, adding \(n\) devices, it only creates a time complexity of \(\mathcal{O}(\dfrac{n}{m})\) and space complexity of \(\mathcal{O}((\dfrac{n}{m})^2)\). So choosing the right \(m\) could change linear and quadratic growth to potentially constant growth. 
 
-We also intend to implement local differential privacy because to protect the collected data from information leakage.
+\begin{figure}[htpb]
+  \centering
+  \includegraphics[width=\textwidth]{figures/aggregation}
+  \caption{Distribution of still raw values.} \label{fig:aggregation}
+\end{figure}
 
-Additionally, to avoid unnecessary constant polling, we will explore some P2P frameworks that can send data directly to the next target device and cut down on forwarding delays.
+Another flaw to Simon van Endern's architecture is the constant polling for new aggregation requests. Each device periodically asks for a request targeted at it and will do so every 15 minutes. Depending on the number of participants in the project could mean up to millions of messages to the server every few minutes. To avoid this, we explore some peer-to-peer frameworks that can send data directly to the next target device and cut down on forwarding delays.
 
-In order to extend the aggregation options, we add the two following two types:
+As we assume that there might possible privacy leaks, we also consider to implement local differential privacy to protect the collected data from that. We look into the benefits and the disadvantages that the implementation of this protection would bring.
+
+Beside architectural design changes, we also want to collect more data, especially real location data. In order to extend the aggregation options, we add the two following two types:
 \begin{itemize}
-    \item number of participants that were at a location in a specific time period
     \item General location of all participants in a location at a specific time
+    \item Number of participants that were at a location in a specific time period
 \end{itemize}
 

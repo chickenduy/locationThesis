@@ -13,10 +13,10 @@ Another flaw in the design is the selection process of the next device. Giving t
 \subsection*{RQ2: What improvements are possible?}
 In chapter 3, we proposed a few upgrades and extended further data collection. To help aggregation, we changed the polling mechanism to a straightforward event-driven one. Using a third-party push notification service, we are able to send requests directly to the participating mobile phones instead of giving them the job to fetch the requests from the server, improving significantly on communication time. We also suggested splitting the single aggregation chain into multiple groups, creating several smaller series of devices to collect the data instead of one long one, parallelizing the process, and cutting down on collection time. We also added the ability to request more accurate mobility data, such as the raw values of steps and activities and information about the location of devices or the presence of a device at a location. 
 
-\subsection*{RQ3: Do the raw values for steps and activities infringe on privacy?}
+\subsection*{RQ3: What information do the raw values for steps and activities reveal?}
 We added raw values to the aggregation of steps and activities as we saw no infraction on privacy by providing these values if there are enough participants. It is crucial to expand the number of users to a certain number to provide privacy because as long as the numbers are low, we can trace the contribution of a participant in an aggregation. At a certain point, the steps and activities data should take the form of a uniform distribution, which then hides the individual raw data inside the collected data set. When the number of participants is reached and the inability to determine if a user participated in the collection request, we are confident that the privacy of the participants is secure. 
 
-\subsection*{RQ4: Is it possible to query for more accurate location data while preserving privacy?}
+\subsection*{RQ4: How much information does the aggregation of real location data expose?}
 We found that similar to other types of data, the number of participants is vital to protect their identity or at least their association. Using suppression, we are unable to hide devices, that are on their own. In chapter 5, we tested the platform in the field and a controlled setting. We were unable to draw any reliable conclusions regarding the usability of the collected data because of the lack of participants in our deployed field test. The privacy, however, we don't see any way how data can use to infer more sensitive data or identity. In the simulated test, we are able to collect much more reliable data. We were able to deduce the travel direction of a device but were unable to trace it back to other information.
 % Todo: about location tracking and spacial cloaking
 
@@ -41,14 +41,14 @@ As discussed in the earlier chapters, homomorphic encryption could be an excelle
 
 Another technique to strengthen privacy would be to give the users the control to participate in the data collection themselves. An option in which they can decide what level of privacy the collected data holds. I.e., either setting the collection to very private, so that all data gathered with the option is protected from aggregation or just changing the privacy level of the data itself.
 
-Also mentioned in the section above is that trust is a topic that can't be handled lightly. Either intentionally providing false information or trying to trace or link private data to a device are possible motives for a malicious user. To combat misinformation and privacy leaks, there has to be a way to establish trust. M. Pouryazdan et al. suggest a score to measure the reputation, which in our eyes could either help with data reliability or create a quasi-identifier for an adversary to exploit.
+Also mentioned in the section above is that trust is a topic that can't be handled lightly. Either intentionally providing false information or trying to trace or link private data to a device are possible motives for a malicious user. To combat misinformation and privacy leaks, there has to be a way to establish trust. Pouryazdan et al. suggest a score to measure the reputation, which in our eyes could either help with data reliability or create a quasi-identifier for an adversary to exploit.
 % Todo: \cite[Quantifying User Reputation Scores, Data Trustworthiness, and User Incentives in Mobile Crowd-Sensing]
 
 \subsection{Server}
 Trust is also an issue for the server. With scandals constantly being reported on, the public trust in corporations and organizations collecting sensitive data is waning. Establishing the server as a trustworthy instance that doesn't mishandle the collected data by enhancing privacy or guaranteeing anonymity would be a step in the right direction. Relinquishing control over the data from a centralized architecture into a decentralized one could also help with this issue.
 
 \subsection{Blockchain}
-Leveraging the power of blockchain, the platform can incentivize the user to participate in aggregation. Ming Li et al. [X] suggest CrowdBC, a decentralized framework for crowdsourcing using blockchain. 
+Leveraging the power of blockchain, the platform can incentivize the user to participate in aggregation. Ming et al. [X] suggest CrowdBC, a decentralized framework for crowdsourcing using blockchain. 
 
 On the one hand, compensating the crowd for participating on the platform would result in more data collected. On the other hand, however, the existence of monetary value would draw in the attention of malicious intentions, making it hard for data to be trustworthy.
 
