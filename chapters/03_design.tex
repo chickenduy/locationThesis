@@ -54,13 +54,13 @@ Our first goal is to make the platform more efficient and scalable. We propose t
   \caption{Distribution of still raw values.} \label{fig:aggregation}
 \end{figure}
 
-Another flaw to Simon van Endern's architecture is the constant polling for new aggregation requests. Each device periodically asks for a request targeted at it and will do so every 15 minutes. Depending on the number of participants in the project could mean up to millions of messages to the server every few minutes. To avoid this, we explore some peer-to-peer frameworks that can send data directly to the next target device and cut down on forwarding delays.
+Another flaw to Simon van Endern's architecture is the constant polling for new aggregation requests. Each user asks for a request targeted at their device and will do so every 15 minutes. Depending on the number of participants in the project, this could mean up to millions of messages to the server every few minutes. To avoid this, we explore some peer-to-peer frameworks that can send data directly to the next target device to cut down on forwarding delays and remove intermediate third parties.
 
-As we assume that there might possible privacy leaks, we also consider to implement local differential privacy to protect the collected data from that. We look into the benefits and the disadvantages that the implementation of this protection would bring.
+As we assume that there might possible privacy leaks, we also consider the inclusion of local differential privacy to protect the collected data. We look into the benefits and the disadvantages that the implementation of this mechanism could bring.
 
 Beside architectural design changes, we also want to collect more data, especially real location data. In order to extend the aggregation options, we add the two following two types:
 \begin{itemize}
-    \item General location of all participants in a location at a specific time
-    \item Number of participants that were at a location in a specific time period
+    \item Location of all participants in an interested area at a specific time
+    \item Number of participants that were in an interested area in a specific time period
 \end{itemize}
 

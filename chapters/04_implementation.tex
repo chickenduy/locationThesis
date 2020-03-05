@@ -21,72 +21,133 @@ Our aggregation results can be fetched over the REST API or viewed directly in t
 
 \section{REST API}
 \label{sec:hello}
-We use a REST API based on the JSON data exchange format, and the endpoints are shown in the table [X].
-% Todo: insert table
+We use a REST API based on the JSON data exchange format, and the endpoints are shown in the table \ref{tab:rest}.
+
+\begin{table}[h]
+\centering
+  \begin{tabularx}{0.92\textwidth}{|l|X|}                                                                             \hline
+		\multicolumn{1}{|c|}{\textbf{HTTP call}} & \multicolumn{1}{c|}{\textbf{Description}} \\ [0.5ex] 
+		\hline
+		POST /crowd HTTP/1.1 & Creates a new user and returns a password \\
+		\hline
+		POST /crowd/ping HTTP/1.1 & Updates the latest timestamp to current time \\
+		\hline
+		POST /aggregationRequest HTTP/1.1 & Initiates a aggregation request and forwards them to the device groups \\ 
+		\hline
+		POST /aggregationsteps HTTP/1.1 & Sends the intermediate step results of a group to the server for further processing  \\ 
+		\hline
+		POST /aggregationactivity HTTP/1.1 & Sends the intermediate activities results of a group to the server for further processing  \\ 
+		\hline
+		POST /aggregationlocation HTTP/1.1 & Sends the intermediate loaction results of a group to the server for further processing  \\ 
+		\hline
+		POST /aggregationpresence HTTP/1.1 & Sends the intermediate presence results of a group to the server for further processing  \\ 
+		\hline
+		GET /aggregationResult HTTP/1.1 & Retrieves a the results of an aggregation request \\ 
+		\hline
+  \end{tabularx}
+  \caption{Description of the API endpoints implemented in the server.}
+  \label{tab:rest}
+\end{table}
+
 
 The endpoints require authentication either as a researcher or as a data collecting user. For the researcher, we currently only create admin access by manually entering the username and password into the database. To register as users as participants in the crowd, they have to send their id and their public key, as depicted in figure [X]. The server provides the participants with a random password for future authentication for sending the end result of their group.
 % Todo: insert figure
 
 \section{Aggregation API}
 
-To start an aggregation, table [X] shows that the researchers have to send their \textit{username} and \textit{password} for authentication, the \textit{requestType} they want to aggregate (steps, activity, location or presence) and additional search options as \textit{request} depending on \textit{requestType} to the server. The search options are visualized in figure [X].
-%\begin{itemize}
-%    \item \textit{start} and \textit{end} or \textit{date}, time frame or point of interest
-%    \item \textit{lat} and \textit{lon}, coordinates of point of interest
-%    \item \textit{radius}, distance to the point of interest
-%    \item \textit{type}, type of activity as encoded in the Google Activity API
-%    % Todo: \cite[https://developers.google.com/android/reference/com/google/android/gms/location/DetectedActivity.html] 
-%    \item \textit{accuracy}, position after the comma to round for GPS accuracy
-%    \item \textit{anonymity}, number of k-anonymity for participants
-%\end{itemize}
+To start an aggregation, table [X] shows that the researchers have to send their \textit{username} and \textit{password} for authentication, the \textit{requestType} they want to aggregate (steps, activity, location or presence) and additional search options as \textit{request} depending on \textit{requestType} to the server. The search options are visualized in figure \ref{fig:search_options}:
+\begin{itemize}
+    \item \textit{start} and \textit{end} or \textit{date}: time of interest
+    \item \textit{lat} and \textit{lon}: coordinates of the point of interest
+    \item \textit{radius}: distance to the point of interest
+    \item \textit{type}: type of activity as encoded in the Google Activity API
+    % Todo: \cite[https://developers.google.com/android/reference/com/google/android/gms/location/DetectedActivity.html] 
+    \item \textit{accuracy}: position after the comma to round for GPS accuracy
+    \item \textit{anonymity}: number of k-anonymity for participants
+\end{itemize}
 % Todo: insert figure
 % Todo: insert table for request
 
-%\begin{figure}[h]
-%\begin{multicols}{4}
-%\begin{lstlisting}
-%{
-%    "date": 0,
-%    "lat": 0,
-%    "lon": 0,
-%    "radius": 0
-%}
-%\end{lstlisting}
-%\columnbreak
-%\begin{lstlisting}
-%{
-%    "type": 0,
-%    "start": 0,
-%    "end": 0,
-%    "lat": 0,
-%    "lon": 0,
-%    "radius": 0
-%}
-%\end{lstlisting}
-%\columnbreak
-%\begin{lstlisting}
-%{
-%    "date": 0,
-%    "accuracy": 0,
-%    "anonymity": 0,
-%    "lat": 0,
-%    "lon": 0,
-%    "radius": 0
-%}
-%\end{lstlisting}
-%\columnbreak
-%\begin{lstlisting}
-%{
-%    "start": 0,
-%    "end": 0,
-%    "lat": 0,
-%    "lon": 0,
-%    "radius": 1
-%}
-%\end{lstlisting}
-%\end{multicols}
-%\caption{From left to right, additional information for \textit{steps}, \textit{activity},\textit{location} and \textit{presence}}
-%\end{figure}
+\newsavebox{\firstlisting}
+\begin{lrbox}{\firstlisting}% Store first listing
+\begin{lstlisting}
+{
+    "date": 1582945200000,
+    "lat": 35.535751,
+    "lon": 139.629355,
+    "radius": 50000
+}
+\end{lstlisting}
+\end{lrbox}
+
+\begin{figure}[htbp]
+\noindent
+\begin{minipage}[b]{.24\textwidth}
+\begin{lstlisting}[caption=Steps]{Name}
+{
+    "date": 1582945200000,
+    "lat": 35.535751,
+    "lon": 139.629355,
+    "radius": 50000
+}
+\end{lstlisting}
+\end{minipage}\hfill
+\begin{minipage}[b]{.24\textwidth}
+\begin{lstlisting}[caption=Activities]{Name}
+{
+    "type": 0,
+    "start": 1582941600000,
+    "end": 1582945200000,
+    "lat": 35.535751,
+    "lon": 139.629355,
+    "radius": 50000
+}
+\end{lstlisting}
+\end{minipage}\hfill
+\begin{minipage}[b]{.24\textwidth}
+\begin{lstlisting}[caption=Location]{Name}
+{
+    "date": 1582945200000,
+    "accuracy": 0,
+    "anonymity": 2,
+    "lat": 35.535751,
+    "lon": 139.629355,
+    "radius": 50000
+}
+\end{lstlisting}
+\end{minipage}\hfill
+\begin{minipage}[b]{.24\textwidth}
+\begin{lstlisting}[caption=Presence]{Name}
+{
+    "start": 1582941600000,
+    "end": 1582945200000,
+    "lat": 35.535751,
+    "lon": 139.629355,
+    "radius": 50000
+}
+\end{lstlisting}
+\end{minipage}
+\caption{Search options for requests}
+\label{fig:search_options}
+\end{figure}
+
+
+\begin{figure}
+    \begin{subfigure}{0.48\textwidth}
+    \begin{lstlisting}[language=C,frame=single,breaklines=true,gobble=4]
+    printf("hello world !!!") // This is a long line sort of command and it repeats itself
+    printf("hello world !!!") // This is a long line sort of command and it repeats itself
+    printf("hello world !!!") // This is a long line sort of command and it repeats itself
+    \end{lstlisting}
+    \caption{Caption a} 
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.48\textwidth}
+    \usebox{\firstlisting}
+    \caption{Caption b}
+    \end{subfigure}
+    \caption{Caption}
+\end{figure}
 
 When the server receives an aggregation request of the described form, it will send out a more detailed request to the device groups for data collection. The messages sent to the first mobile phones can be seen in the table [X].
 % Todo: insert figure

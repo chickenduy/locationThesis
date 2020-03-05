@@ -11,26 +11,24 @@ We started with aggregating similar data to Simon van Endern, such as steps data
 \subsection{Data Consumption}
 Running the application by itself should not require a lot of data, as the only data consumption only comes from the initial registration request to the server, the periodical ping to the push service, and the aggregation requests. We let the application run for the first few days and aggregated data irregularly starting after the 29.01.20. But most of the requests were sent towards the end of the field test, on the 05.02.20 and the 06.02.20. In the figure \ref{fig:diagram_requests}, the distribution of the aggregation can be seen. We were able to request proof of data consumption from 4 participants, but are only able to confirm that some of them were actively providing data in requests. The provided screenshots can be viewed in the Appendix, and consumption is shown in table [X]. 
 
-% Todo: fix table below to consumption
-\begin{table}[htbp]
-	\centering
-	\begin{tabular}{|c c c|} 
-		\hline
-		Date & Location & Users\\ [0.5ex] 
-	
-	\end{tabular}
-	\caption{Location values collected over the test period each day at 12 pm JST}
-	\label{tab:location_jst}
-\end{table}
-
-
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=0.8\textwidth]{figures/diagram_requests.png}
   \caption{Simon van Endern's original architecture.} \label{fig:diagram_requests}
 \end{figure}
 
-% Todo: insert table for request distribution
+% Todo: fix table below to consumption
+\begin{table}[htbp]
+	\centering
+	\begin{tabular}{|c c c|} 
+		\hline
+		Date & Location & Users\\ [0.5ex] 
+		\hline
+	\end{tabular}
+	\caption{Location values collected over the test period each day at 12 pm JST}
+	\label{tab:location_jst}
+\end{table}
+
 % Todo: insert table for data consumption
 We can see in all cases that data consumption did not exceed 10MB and, in most cases, did not even use more than 5MB. We could extrapolate that the consumption of data should not be a lot more than twice, depending on the number of aggregation requests sent because the parallelization of the data collection should always aim for small groups.
 
@@ -68,14 +66,13 @@ For cycling, on some days, we only had one value of around 7 minutes. We can ass
 
 % Todo: write about the location data
 Now we take a look at the location and presence data. In the tables \ref{tab:location_cet} and \ref{tab:location_jst}, we can see the GPS coordinates that we get after the server suppresses them for k-anonymity. We do this because there is a lot of information if only one person in a greater area is present. If we collect only spatially cloaked area in the vicinity and we do this for several time points, we can assume with high confidence, the general trajectory of that user posing a risk to privacy.
-% Todo: insert table
 
 \begin{table}[htbp]
 	\centering
 	\begin{tabular}{|c c c|} 
 		\hline
-		Date & Location & Users\\ [0.5ex] 
-		\hline\hline
+		\textbf{Date} & \textbf{Location} & \textbf{Users} \\ [0.5ex] 
+		\hline
 		29.01.20 & (48.50108260577674, 11.495067909974292) & 2 \\
 		&\textit{suppressed}& 1 \\
 		\hline
@@ -109,8 +106,8 @@ Now we take a look at the location and presence data. In the tables \ref{tab:loc
 	\centering
 	\begin{tabular}{|c c c|} 
 		\hline
-		Date & Location & Users\\ [0.5ex] 
-		\hline\hline
+		\textbf{Date} & \textbf{Location} & \textbf{Users}\\ [0.5ex] 
+		\hline
 		29.01.20 &\textit{suppressed}&\textit{suppressed}\\ 
 		\hline
 		30.01.20 &\textit{suppressed}& 2 \\ 

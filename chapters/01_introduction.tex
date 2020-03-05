@@ -41,20 +41,20 @@ Simon van Endern proposed a solution to return control over the data back to the
 When collecting data, it is crucial to find a balance between its usability and the privacy of the collecting party. It is also important to keep in mind, that there has to be a level of trust in both the data collector and the data analyst.
 \subsection*{RQ1: What are the benefits and drawbacks in Simon van Endern's architecture?}
 We take a look at Simon van Endern's original idea and implemented architecture. We investigate both the advantages and disadvantages of his idea in regards to scalability, security, and privacy.
-% Todo: Something about weak points.
 \subsection*{RQ2: What improvements are possible?}
 His work shows a minimal viable product on which we can expand further. We search for possible ways to improve on his architecture and explore possible aggregations.
 \subsection*{RQ3: What information do the raw values for steps and activities reveal?}
 As Simon van Endern has shown, mean values expose less private information. We want to take a look into the raw data that makes up the mean values and analyze the privacy concerns regarding the distribution of the step values and activities values for the participants and if they can  be used to link to other data.
 \subsection*{RQ4: How much information does the aggregation of real location data expose?}
 Related work has shown that location data are very susceptible to leaking private information. We look into methods to disassociate the mobility data with the individual to provide anonymity while maintaining statistical relevance.
-% Todo: about location tracking and spacial cloaking
 \subsection*{RQ5: Can we use the current state of P2P technology to remove intermediate third parties?}
 There have been a lot of advancements in direct communication frameworks, and we look into possible SDKs that can be leveraged to implement and enable a more decentralized or distributed architecture.
+% Todo: Elaborate more
 
 \section{Contributions}
 
-We will reexamine the results found by Simon van Endern, and we will expand on his original idea while focusing on the scalability of the crowdsourcing platform and the privacy analysis of aggregation for more specific mobility data.
+Our research has the same structure as Simon van Endern's. He has already laid the foundation with his bottom-up approach of collecting mobility data using crowdsourcing and the aggregation of some basic data. Using his idea, we will into the aggregation of real location data and analyze them for privacy risks using a real test and a simulated one.
+
 % Todo: \cite[Simon van Endern]
 % Todo: write more content
 
