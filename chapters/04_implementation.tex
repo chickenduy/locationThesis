@@ -68,18 +68,6 @@ To start an aggregation, table [X] shows that the researchers have to send their
 % Todo: insert figure
 % Todo: insert table for request
 
-\newsavebox{\firstlisting}
-\begin{lrbox}{\firstlisting}% Store first listing
-\begin{lstlisting}
-{
-    "date": 1582945200000,
-    "lat": 35.535751,
-    "lon": 139.629355,
-    "radius": 50000
-}
-\end{lstlisting}
-\end{lrbox}
-
 \begin{figure}[htbp]
 \noindent
 \begin{minipage}[b]{.24\textwidth}
@@ -132,23 +120,6 @@ To start an aggregation, table [X] shows that the researchers have to send their
 \end{figure}
 
 
-\begin{figure}
-    \begin{subfigure}{0.48\textwidth}
-    \begin{lstlisting}[language=C,frame=single,breaklines=true,gobble=4]
-    printf("hello world !!!") // This is a long line sort of command and it repeats itself
-    printf("hello world !!!") // This is a long line sort of command and it repeats itself
-    printf("hello world !!!") // This is a long line sort of command and it repeats itself
-    \end{lstlisting}
-    \caption{Caption a} 
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}{0.48\textwidth}
-    \usebox{\firstlisting}
-    \caption{Caption b}
-    \end{subfigure}
-    \caption{Caption}
-\end{figure}
-
 When the server receives an aggregation request of the described form, it will send out a more detailed request to the device groups for data collection. The messages sent to the first mobile phones can be seen in the table [X].
 % Todo: insert figure
 % Todo: insert table for message
@@ -171,7 +142,7 @@ Because the platform relies on the generation of data from the crowd, the main f
 
 \begin{figure}[htpb]
   \centering
-  \includegraphics[width=0.8\textwidth]{figures/modules}
+  \includegraphics[width=0.8\textwidth]{figures/modules.png}
   \caption{Distribution of still raw values.} \label{fig:modules}
 \end{figure}
 
