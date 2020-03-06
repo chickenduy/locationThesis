@@ -46,13 +46,22 @@ We examined his work and discovered a few flaws that we might be able to improve
 \subsection{Expanded Approach}
 Simon van Endern's original idea, as is, can hardly be scaled because of the nature of its forwarding chain. Adding \(n\) new devices creates a linear time complexity of \(\mathcal{O}(n)\) and space complexity of \(\mathcal{O}(n^2)\). For every device added, the aggregation takes up to an additional 15 minutes, and the data fetched and sent is the data of all previous devices combined, making it quite a burden on participant's data plan depending on their position in the chain.
 
-Our first goal is to make the platform more efficient and scalable. We propose to parallelize the chains by building multiple groups for the aggregation, as shown in figure \ref{fig:aggregation}. Each chain in itself resembles the Simon van Endern's original idea in figure \ref{fig:simon_original}. With \(m\) groups, adding \(n\) devices, it only creates a time complexity of \(\mathcal{O}(\dfrac{n}{m})\) and space complexity of \(\mathcal{O}((\dfrac{n}{m})^2)\). So choosing the right \(m\) could change linear and quadratic growth to potentially constant growth. 
+Our first goal is to make the platform more efficient and scalable. We propose to parallelize the chains by building multiple groups for the aggregation, as shown in figure \ref{fig:ar}. Each chain in itself resembles the Simon van Endern's original idea in figure \ref{fig:simon_original}. With \(m\) groups, adding \(n\) devices, it only creates a time complexity of \(\mathcal{O}(\dfrac{n}{m})\) and space complexity of \(\mathcal{O}((\dfrac{n}{m})^2)\). So choosing the right \(m\) could change linear and quadratic growth to potentially constant growth. 
 
-\begin{figure}[htpb]
+\begin{figure}[htbp]
   \centering
-  \includegraphics[width=\textwidth]{figures/aggregation}
-  \caption{Distribution of still raw values.} \label{fig:aggregation}
+  \includegraphics[width=0.8\textwidth]{figures/ar}
+  \caption{Data flow of an aggregation in the new architecture} \label{fig:ar}
 \end{figure}
+
+\begin{enumerate}
+	\item Researcher sends aggregation request to central server
+	\item Server forwards aggregation request to each group
+	\item Each group aggregates the data internally
+	\item Finally the last device in each group returns the results to the central server
+\end{enumerate}
+
+Initially, we thought to aggregate data on a final device instead using our central server. We choose against that design because of limited data coverage for mobile devices. Most mobile phone plans have a data cap they are able use after which bandwidth is throttled. Keeping this limit in mind we opted for the collection of the data on the server.
 
 Another flaw to Simon van Endern's architecture is the constant polling for new aggregation requests. Each user asks for a request targeted at their device and will do so every 15 minutes. Depending on the number of participants in the project, this could mean up to millions of messages to the server every few minutes. To avoid this, we explore some peer-to-peer frameworks that can send data directly to the next target device to cut down on forwarding delays and remove intermediate third parties.
 

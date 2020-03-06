@@ -21,8 +21,9 @@ We found that similar to other types of data, the number of participants is vita
 % Todo: about location tracking and spacial cloaking
 
 \subsection*{RQ5: Can we use the current state of P2P technology to remove intermediate third parties?}
-Chapter 4 has shown our attempts to implement P2P technology into a mobile application. We have identified Textile as a viable candidate for our project, but unfortunately, one of the most important aspects didn't meet our expectations. There is a lot of progress in that technology, but some work still has to be done before it can be used in production. We should also look into decentralized communication standards, such as matrix, that can be used as an alternative to our initial direct communication approach.
+Chapter 4 has shown our attempts to implement P2P technology into a mobile application. We have identified Textile as a viable candidate for our project, but unfortunately, one of the most important aspects didn't meet our expectations. There is a lot of progress in that technology, but some work still has to be done before it can be used in production. We should also look into decentralized communication standards, such as matrix
 % Todo: \cite[https://matrix.org/]
+, that can be used as an alternative to our initial direct communication approach.
 
 \section{Limitations}
 As mentioned before, there are a lot of short-term obstacles that we identified that could be improved in the short-term and some that warrant further research in the long-term.
@@ -61,4 +62,4 @@ Further research on the collection, aggregation, and analysis of mobility data w
 On the client-side, we have mobile phones. The application can be built using the Android Studio IDE and installed on any compatible Android device. Similar to the server, the comments specify the locations where URLs have to be modified. The application was built from the ground up with modularity in mind, making it possible to replace communication schemes.
 % Todo: \cite[application]
 
-First, the server and the database has to be started. After that, the Android applications can be started, triggering the registration process automatically when the permissions have been accepted. With everything running, aggregation requests can be initiated by consuming the REST API detailed in section \ref{sec:hello}, and the end result should be stored in the deployed database instance.
+First, the server and the database has to be started. After that, the Android applications can be started, triggering the registration process automatically when the permissions have been accepted. With everything running, aggregation requests can be initiated by consuming the REST API detailed in section \ref{sec:api}, and the end result should be stored in the deployed database instance.

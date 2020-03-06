@@ -20,7 +20,7 @@ On the server-side of development, we select Node.js using Typescript combined w
 Our aggregation results can be fetched over the REST API or viewed directly in the MongoDB Atlas interface, given access privileges.
 
 \section{REST API}
-\label{sec:hello}
+\label{sec:api}
 We use a REST API based on the JSON data exchange format, and the endpoints are shown in the table \ref{tab:rest}.
 
 \begin{table}[htbp]
@@ -49,21 +49,16 @@ We use a REST API based on the JSON data exchange format, and the endpoints are 
   \label{tab:rest}
 \end{table}
 
-The endpoints require authentication either as a researcher or as a data collecting user. For the researcher, we currently only create admin access by manually entering the username and password into the database. To register as users as participants in the crowd, they have to send their id and their public key, as depicted in figure [X]. The server provides the participants with a random password for future authentication for sending the end result of their group.
-% Todo: insert figure
+The endpoints require authentication either as a researcher or as a data collecting user. For the researcher, we currently only create admin access by manually entering the username and password into the database. To register as users as participants in the crowd, they have to send their id and their public key, as depicted in figure \ref{lst:registration} . The server provides the participants with a random password for future authentication for sending the end result of their group.
+
+\begin{lstlisting}[caption=Registration message sent to the server, label={lst:registration}]
+	{
+	    "id": "35e78c9a6072b5e81ac2a5",
+	    "publicKey": "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCFEpvwtF76IsnmRxaPW7cDbzv4..."
+	}
+\end{lstlisting}
 
 \section{Aggregation API}
-
-To start an aggregation, listing \ref{lst:request} shows the researchers have to send their \textit{username} and \textit{password} for authentication, the \textit{requestType} they want to aggregate and additional search options as \textit{request} depending on \textit{requestType} to the server. The search options are visualized in the listings \ref{lst:steps}, \ref{lst:activities}, \ref{lst:locations} and \ref{lst:presence}:
-\begin{itemize}
-    \item \textit{start} and \textit{end} or \textit{date}: time of interest
-    \item \textit{lat} and \textit{lon}: coordinates of the point of interest
-    \item \textit{radius}: distance to the point of interest
-    \item \textit{type}: type of activity as encoded in the Google Activity API
-    % Todo: \cite[https://developers.google.com/android/reference/com/google/android/gms/location/DetectedActivity.html] 
-    \item \textit{accuracy}: position after the comma to round for GPS accuracy
-    \item \textit{anonymity}: number of k-anonymity for participants
-\end{itemize}
 
 \begin{lstlisting}[caption=Initial aggregation request from researcher, label={lst:request}]
 {
@@ -74,6 +69,19 @@ To start an aggregation, listing \ref{lst:request} shows the researchers have to
 }
 \end{lstlisting}
 % Todo: replace X
+
+To start an aggregation, figure \ref{lst:request} shows the researchers have to send their \textit{username} and \textit{password} for authentication, the \textit{requestType} they want to aggregate and additional search options as \textit{request} depending on \textit{requestType} to the server. Example search options are visualized in the listings \ref{lst:steps}, \ref{lst:activities}, \ref{lst:locations} and \ref{lst:presence}.
+
+The following arguments are used in the search options:
+\begin{itemize}
+    \item \textit{start} and \textit{end} or \textit{date}: time of interest as an epoch integer
+    \item \textit{lat} and \textit{lon}: coordinates of the point of interest as floating point integers
+    \item \textit{radius}: distance to the point of interest in km as integer
+    \item \textit{type}: type of activity as encoded in the Google Activity API
+    % Todo: \cite[https://developers.google.com/android/reference/com/google/android/gms/location/DetectedActivity.html] 
+    \item \textit{accuracy}: position after the comma to round for GPS accuracy as integer
+    \item \textit{anonymity}: selected k for k-anonymity as integer
+\end{itemize}
 
 \begin{lstlisting}[caption=Search options for steps, label={lst:steps}]
 {
@@ -116,9 +124,8 @@ To start an aggregation, listing \ref{lst:request} shows the researchers have to
 }
 \end{lstlisting}
 
-When the server receives an aggregation request of the described form, it will send out a more detailed request to the device groups for data collection. The messages sent to the first mobile phones can be seen in the listing \ref{lst:aggregation}.
-% Todo: insert figure
-% Todo: insert table for message
+
+When the server receives an aggregation request of the described form, it will send out a more detailed request to the device groups for data collection. The messages sent to the first mobile phones can be seen in listing \ref{lst:aggregation}.
 
 \begin{lstlisting}[caption=First aggregation request sent to the groups, label={lst:aggregation}]
 {
@@ -148,7 +155,7 @@ When the server receives an aggregation request of the described form, it will s
 \end{lstlisting}
 % Todo: replace X
 
-After receiving and adding their data, the phones encrypt the \textit{data} JSON object and forward a similar message as figure [X] to the next device in the list. After reaching the last, it sends the results back to the server. The messages to the server contain the password generated on registration for authentication.
+After receiving and adding their data, the phones encrypt the \textit{data} JSON object and forward a similar message as listing \ref{lst:aggregation} to the next device in the list. After reaching the last, it sends the results back to the server. The messages to the server contain the password generated on registration for authentication.
 
 The implementation of the different JSON formats are flexible and can accommodate more aggregation types. The next sections will describe the features and the process of aggregation more in-depth from the Android device's and the server's point of view.
 
@@ -167,7 +174,7 @@ Because the platform relies on the generation of data from the crowd, the main f
 \begin{figure}[htpb]
   \centering
   \includegraphics[width=0.8\textwidth]{figures/modules}
-  \caption{Distribution of still raw values.} \label{fig:modules}
+  \caption{Overview of the Android architecture} \label{fig:modules}
 \end{figure}
 
 On starting up, the application opens into the \textit{Main Activity}, where it asks the users for permission to access location services. On acceptance, the application starts the background services for data collection explained in the next section. It also serves the purpose of displaying stored data. A screen for each type is implemented: steps, activities, and GPS. Using Simon van Endern's Android application as a blueprint, we implement the same features to keep our application running behind the scenes. Because of background limitations Android introduced with Android Oreo, we create a non-dismissible notification that is displayed in the status bar and the notification center. This turns the application into a foreground application, bypassing the limitations set in the newer Android versions. To keep user interaction to a minimum, we enable the application to reopen when it crashes or is closed, and when it is rebooted.
@@ -195,11 +202,34 @@ Thus we opted to instead use a third-party push notification service as an inter
 \subsubsection{Push}
 To replace Simon van Ender's polling with an event-based action architecture, figure \ref{fig:aggregation} shows our new design. For our push service, we select Pushy
 % Todo: \cite[Pushy]
-because of their free entry barrier and independence from big tech companies, as well as having implementations for both iOS and Android. We could also have used Firebase Cloud Messaging to forward messages. Of course, the modular architecture of the app enables us to swap this method of communication for a P2P solution as soon as one proves applicable.
+because of their free entry barrier and independence from big tech companies, as well as having implementations for both iOS and Android. We could also have used Firebase Cloud Messaging to forward messages. Additionally, Pushy makes use of MQTT
+% Todo: \cite[http://mqtt.org/]
+, a light-weight messaging protocol that uses a small amount of bandwidth. Of course, the modular architecture of the app enables us to swap this method of communication for a P2P solution as soon as one proves applicable.
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.8\textwidth]{figures/ar2}
+  \caption{Data flow of an aggregation inside a group} \label{fig:ar2}
+\end{figure}
+
+\begin{enumerate}
+	\item Researcher sends aggregation request to central server
+	\item Server sends request push service
+	\item Push service forwards request to first device
+	\item Device adds data and sends results to push service targeting next device
+	\item Push service forwards request to next device
+	\item Device adds data and sends results to push service targeting next device
+	\item Device sends confirmation message to push service targeting previous device
+	\item Push service forwards confirmation to previous device
+	\item Push service forwards request to next device and repeat until last device
+	\item Last device adds data and sends results back to the server.
+	\item Last device sends confirmation message to push service targeting previous device
+	\item Push service forwards confirmation to previous device
+\end{enumerate}
 
 The complete communication infrastructure is handled by the communication service, communication receiver, and communication handler. After starting the application, the \textit{Background Service} creates the communication service that registers the device to the push service and receives a token as identification. Then it generates an asymmetric RSA key pair and registers itself to our platform with the Pushy token as \textit{id} and the \textit{publicKey} over the REST API. As a reply, the mobile phone receives a random password for future authentication purposes mentioned previously.
 
-The communication receiver works as the entry point for push notifications from the push service and adds relevant data to the message. Upon receiving an aggregation request like in figure [X], it checks for encryption and, if required, decrypts the data field depicted in figure [X]. The application then aggregates data according to the \textit{type} sent in the \textit{requestHeader}:
+The communication receiver works as the entry point for push notifications from the push service and adds relevant data to the message. Upon receiving an aggregation request like in listing \ref{lst:aggregation}, it checks for encryption and, if required, decrypts the data field. The application then aggregates data according to the \textit{type} sent in the \textit{requestHeader}:
 \begin{itemize}
     \item \textbf{steps}: We add up the number of steps from the start and end of the specified day and add it to the list of raw values.
     \item \textbf{activities}: In this case, we sum up the time spent on the specified activity in the defined time frame and add that to the list of raw values.
@@ -240,7 +270,7 @@ receives data over the database communication module. The architecture can be se
 \begin{figure}[htpb]
   \centering
   \includegraphics[width=0.5\textwidth]{figures/server}
-  \caption{Distribution of still raw values.} \label{fig:server}
+  \caption{Overview of the server architecture} \label{fig:server}
 \end{figure}
 
 As our programming language, we select Typescript because of its versatility. As a superset of Javascript, it supports all Javascript libraries natively and allows for object-oriented programming paradigms. Also, it provides optional static typing and better code structure. But to run the server, we transpile our Typescript code to Javascript code to run the webserver.
@@ -249,11 +279,11 @@ When we start the server, \textit{app.ts} registers the routes described in the 
 
 \subsection{Registration}
 
-Upon starting the application, it registers to the server using the JSON shown in figure [X] over the \textit{/crowd} route. To update the latest timestamp, we also have an obsolete route \textit{/crowd/ping}, which has been replaced with the ping our push notification service already provides. But this route can be modified to ping the devices for their current status if another communication model is adapted.
+Upon starting the application, it registers to the server using the JSON shown in figure \ref{fig:registration} over the \textit{/crowd} route. To update the latest timestamp, we also have an obsolete route \textit{/crowd/ping}, which has been replaced with the ping our push notification service already provides. But this route can be modified to ping the devices for their current status if another communication model is adapted.
 
 \subsection{Aggregation}
 
-We create one route to which the researchers can send their aggregation requests. After receiving a JSON in the mentioned form in the listing \ref{lst:request} in route \textit{/aggregationRequest}, the server will get all the devices, ping them using the push service, select all the available participants and calculate the groups. Before assigning the groups, we use the Fisher-Yates shuffle to mix the order of the users. We calculate group sizes depending on a designated minimal length, so the aggregation has enough members in each group for anonymity purposes, but small enough to stay efficient. After all that, the server sends the aggregation request to all groups using the push service.
+We create one route to which the researchers can send their aggregation requests. After receiving a JSON in the mentioned form in the listing \ref{fig:request} in route \textit{/aggregationRequest}, the server will get all the devices, ping them using the push service, select all the available participants and calculate the groups. Before assigning the groups, we use the Fisher-Yates shuffle to mix the order of the users. We calculate group sizes depending on a designated minimal length, so the aggregation has enough members in each group for anonymity purposes, but small enough to stay efficient. After all that, the server sends the aggregation request to all groups using the push service.
 
 On request creation, the server creates a temporary aggregation object that stores the id, number of groups, and how many it already has received. We have four additional routes for the final aggregation, \textit{/aggregationsteps}, \textit{/aggregationactivity}, \textit{/aggregationlocation} and \textit{/aggregationpresence}. They each manage the POST requests from the Android devices and calculate data or ensure anonymity.
 
