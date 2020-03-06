@@ -70,9 +70,10 @@ To start an aggregation, listing \ref{lst:request} shows the researchers have to
     "username": "admin",
     "password": password,
     "requestType": "steps" or "activities" or "location" or "presence",
-    "request": see listing 4., 4., 4. or 4.
+    "request": see listing 4.X, 4.X, 4.X or 4.X
 }
 \end{lstlisting}
+% Todo: replace X
 
 \begin{lstlisting}[caption=Search options for steps, label={lst:steps}]
 {
@@ -137,7 +138,7 @@ When the server receives an aggregation request of the described form, it will s
                 "from": "token",
                 "group": []
             },
-            "requestData": see listing 4., 4., 4. or 4.,
+            "requestData": see listing 4.X, 4.X, 4.X or 4.X,
             "data": {
                 "n": 0,
                 "raw": []
@@ -145,6 +146,7 @@ When the server receives an aggregation request of the described form, it will s
 	}
 }
 \end{lstlisting}
+% Todo: replace X
 
 After receiving and adding their data, the phones encrypt the \textit{data} JSON object and forward a similar message as figure [X] to the next device in the list. After reaching the last, it sends the results back to the server. The messages to the server contain the password generated on registration for authentication.
 
