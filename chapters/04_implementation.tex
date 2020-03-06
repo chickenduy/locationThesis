@@ -23,7 +23,7 @@ Our aggregation results can be fetched over the REST API or viewed directly in t
 \label{sec:hello}
 We use a REST API based on the JSON data exchange format, and the endpoints are shown in the table \ref{tab:rest}.
 
-\begin{table}[h]
+\begin{table}[htbp]
 \centering
   \begin{tabularx}{0.92\textwidth}{|l|X|}                                                                             \hline
 		\multicolumn{1}{|c|}{\textbf{HTTP call}} & \multicolumn{1}{c|}{\textbf{Description}} \\ [0.5ex] 
@@ -49,13 +49,12 @@ We use a REST API based on the JSON data exchange format, and the endpoints are 
   \label{tab:rest}
 \end{table}
 
-
 The endpoints require authentication either as a researcher or as a data collecting user. For the researcher, we currently only create admin access by manually entering the username and password into the database. To register as users as participants in the crowd, they have to send their id and their public key, as depicted in figure [X]. The server provides the participants with a random password for future authentication for sending the end result of their group.
 % Todo: insert figure
 
 \section{Aggregation API}
 
-To start an aggregation, table [X] shows that the researchers have to send their \textit{username} and \textit{password} for authentication, the \textit{requestType} they want to aggregate (steps, activity, location or presence) and additional search options as \textit{request} depending on \textit{requestType} to the server. The search options are visualized in figure \ref{fig:search_options}:
+To start an aggregation, listing \ref{lst:request} shows the researchers have to send their \textit{username} and \textit{password} for authentication, the \textit{requestType} they want to aggregate and additional search options as \textit{request} depending on \textit{requestType} to the server. The search options are visualized in the listings \ref{lst:steps}, \ref{lst:activities}, \ref{lst:locations} and \ref{lst:presence}:
 \begin{itemize}
     \item \textit{start} and \textit{end} or \textit{date}: time of interest
     \item \textit{lat} and \textit{lon}: coordinates of the point of interest
@@ -65,12 +64,17 @@ To start an aggregation, table [X] shows that the researchers have to send their
     \item \textit{accuracy}: position after the comma to round for GPS accuracy
     \item \textit{anonymity}: number of k-anonymity for participants
 \end{itemize}
-% Todo: insert figure
-% Todo: insert table for request
 
-\newsavebox{\firstlisting}
-\begin{lrbox}{\firstlisting}% Store first listing
-\begin{lstlisting}
+\begin{lstlisting}[caption=Initial aggregation request from researcher, label={lst:request}]
+{
+    "username": "admin",
+    "password": password,
+    "requestType": "steps" or "activities" or "location" or "presence",
+    "request": see listing 4., 4., 4. or 4.
+}
+\end{lstlisting}
+
+\begin{lstlisting}[caption=Search options for steps, label={lst:steps}]
 {
     "date": 1582945200000,
     "lat": 35.535751,
@@ -78,22 +82,8 @@ To start an aggregation, table [X] shows that the researchers have to send their
     "radius": 50000
 }
 \end{lstlisting}
-\end{lrbox}
 
-\begin{figure}[htbp]
-\noindent
-\begin{minipage}[b]{.24\textwidth}
-\begin{lstlisting}[caption=Steps]{Name}
-{
-    "date": 1582945200000,
-    "lat": 35.535751,
-    "lon": 139.629355,
-    "radius": 50000
-}
-\end{lstlisting}
-\end{minipage}\hfill
-\begin{minipage}[b]{.24\textwidth}
-\begin{lstlisting}[caption=Activities]{Name}
+\begin{lstlisting}[caption=Search options for activities, label={lst:activities}]
 {
     "type": 0,
     "start": 1582941600000,
@@ -103,9 +93,8 @@ To start an aggregation, table [X] shows that the researchers have to send their
     "radius": 50000
 }
 \end{lstlisting}
-\end{minipage}\hfill
-\begin{minipage}[b]{.24\textwidth}
-\begin{lstlisting}[caption=Location]{Name}
+
+\begin{lstlisting}[caption=Search options for locations, label={lst:locations}]
 {
     "date": 1582945200000,
     "accuracy": 0,
@@ -115,9 +104,8 @@ To start an aggregation, table [X] shows that the researchers have to send their
     "radius": 50000
 }
 \end{lstlisting}
-\end{minipage}\hfill
-\begin{minipage}[b]{.24\textwidth}
-\begin{lstlisting}[caption=Presence]{Name}
+
+\begin{lstlisting}[caption=Search options for presence, label={lst:presence}]
 {
     "start": 1582941600000,
     "end": 1582945200000,
@@ -126,32 +114,37 @@ To start an aggregation, table [X] shows that the researchers have to send their
     "radius": 50000
 }
 \end{lstlisting}
-\end{minipage}
-\caption{Search options for requests}
-\label{fig:search_options}
-\end{figure}
 
-
-\begin{figure}
-    \begin{subfigure}{0.48\textwidth}
-    \begin{lstlisting}[language=C,frame=single,breaklines=true,gobble=4]
-    printf("hello world !!!") // This is a long line sort of command and it repeats itself
-    printf("hello world !!!") // This is a long line sort of command and it repeats itself
-    printf("hello world !!!") // This is a long line sort of command and it repeats itself
-    \end{lstlisting}
-    \caption{Caption a} 
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}{0.48\textwidth}
-    \usebox{\firstlisting}
-    \caption{Caption b}
-    \end{subfigure}
-    \caption{Caption}
-\end{figure}
-
-When the server receives an aggregation request of the described form, it will send out a more detailed request to the device groups for data collection. The messages sent to the first mobile phones can be seen in the table [X].
+When the server receives an aggregation request of the described form, it will send out a more detailed request to the device groups for data collection. The messages sent to the first mobile phones can be seen in the listing \ref{lst:aggregation}.
 % Todo: insert figure
 % Todo: insert table for message
+
+\begin{lstlisting}[caption=First aggregation request sent to the groups, label={lst:aggregation}]
+{
+	"to": "35e78c9a6072b5e81ac2a5",
+	"data": {
+		"encryptionKey": null,
+		"iv": null,
+            "requestHeader": {
+			"id": "618k1ndk71bvw1h",
+                "start": 1582941600000,
+                "end": 1582945200000,
+                "type": "steps" or "activities" or "location" or "presence"
+            },
+            "requestOptions": {
+                "groupNumber": 0,
+                "numberOfGroups": 1,
+                "from": "token",
+                "group": []
+            },
+            "requestData": see listing 4., 4., 4. or 4.,
+            "data": {
+                "n": 0,
+                "raw": []
+		}
+	}
+}
+\end{lstlisting}
 
 After receiving and adding their data, the phones encrypt the \textit{data} JSON object and forward a similar message as figure [X] to the next device in the list. After reaching the last, it sends the results back to the server. The messages to the server contain the password generated on registration for authentication.
 
@@ -258,7 +251,7 @@ Upon starting the application, it registers to the server using the JSON shown i
 
 \subsection{Aggregation}
 
-We create one route to which the researchers can send their aggregation requests. After receiving a JSON in the mentioned form in figure [X,X,X,X] in route \textit{/aggregationRequest}, the server will get all the devices, ping them using the push service, select all the available participants and calculate the groups. Before assigning the groups, we use the Fisher-Yates shuffle to mix the order of the users. We calculate group sizes depending on a designated minimal length, so the aggregation has enough members in each group for anonymity purposes, but small enough to stay efficient. After all that, the server sends the aggregation request to all groups using the push service.
+We create one route to which the researchers can send their aggregation requests. After receiving a JSON in the mentioned form in the listing \ref{lst:request} in route \textit{/aggregationRequest}, the server will get all the devices, ping them using the push service, select all the available participants and calculate the groups. Before assigning the groups, we use the Fisher-Yates shuffle to mix the order of the users. We calculate group sizes depending on a designated minimal length, so the aggregation has enough members in each group for anonymity purposes, but small enough to stay efficient. After all that, the server sends the aggregation request to all groups using the push service.
 
 On request creation, the server creates a temporary aggregation object that stores the id, number of groups, and how many it already has received. We have four additional routes for the final aggregation, \textit{/aggregationsteps}, \textit{/aggregationactivity}, \textit{/aggregationlocation} and \textit{/aggregationpresence}. They each manage the POST requests from the Android devices and calculate data or ensure anonymity.
 
