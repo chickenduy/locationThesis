@@ -200,7 +200,7 @@ Textile leverages the strength of both technologies. Their main feature threads,
 Thus we opted to instead use a third-party push notification service as an intermediary to forward the messages between the server and other devices.
 
 \subsubsection{Push}
-To replace Simon van Ender's polling with an event-based action architecture, Figure \ref{fig:aggregation} shows our new design. For our push service, we select Pushy
+To replace Simon van Ender's polling with an event-based action architecture, Figure \ref{fig:ar2} shows our new design. For our push service, we select Pushy
 % Todo: \cite[Pushy]
 because of their free entry barrier and independence from big tech companies, as well as having implementations for both iOS and Android. We could also have used Firebase Cloud Messaging to forward messages. Additionally, Pushy makes use of MQTT
 % Todo: \cite[http://mqtt.org/]
@@ -278,10 +278,10 @@ As our programming language, we select Typescript because of its versatility. As
 When we start the server, \textit{app.ts} registers the routes described in the Table \ref{tab:rest} and connects the database object to the cloud storage instance. All calls to MongoDB are handled over that object, while the route handler manages calls to the endpoints.
 
 \subsection{Registration}
-Upon starting the application, it registers to the server using the JSON shown in Figure \ref{fig:registration} over the \textit{/crowd} route. To update the latest timestamp, we also have an obsolete route \textit{/crowd/ping}, which has been replaced with the ping our push notification service already provides. But this route can be modified to ping the devices for their current status if another communication model is adapted.
+Upon starting the application, it registers to the server using the JSON shown in Listing \ref{lst:registration} over the \textit{/crowd} route. To update the latest timestamp, we also have an obsolete route \textit{/crowd/ping}, which has been replaced with the ping our push notification service already provides. But this route can be modified to ping the devices for their current status if another communication model is adapted.
 
 \subsection{Aggregation}
-We create one route to which the researchers can send their aggregation requests. After receiving a JSON in the mentioned form in the Listing \ref{fig:request} in route \textit{/aggregationRequest}, the server will get all the devices, ping them using the push service, select all the available participants and calculate the groups. Before assigning the groups, we use the Fisher-Yates shuffle to mix the order of the users. We calculate group sizes depending on a designated minimal length, so the aggregation has enough members in each group for anonymity purposes, but small enough to stay efficient. After all that, the server sends the aggregation request to all groups using the push service.
+We create one route to which the researchers can send their aggregation requests. After receiving a JSON in the mentioned form in the Listing \ref{lst:request} in route \textit{/aggregationRequest}, the server will get all the devices, ping them using the push service, select all the available participants and calculate the groups. Before assigning the groups, we use the Fisher-Yates shuffle to mix the order of the users. We calculate group sizes depending on a designated minimal length, so the aggregation has enough members in each group for anonymity purposes, but small enough to stay efficient. After all that, the server sends the aggregation request to all groups using the push service.
 
 On request creation, the server creates a temporary aggregation object that stores the id, number of groups, and how many it already has received. We have four additional routes for the final aggregation, \textit{/aggregationsteps}, \textit{/aggregationactivity}, \textit{/aggregationlocation} and \textit{/aggregationpresence}. They each manage the POST requests from the Android devices and calculate data or ensure anonymity.
 
