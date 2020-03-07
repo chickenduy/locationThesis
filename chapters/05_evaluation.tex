@@ -2,7 +2,7 @@
 % Add the above to each chapter to make compiling the PDF easier in some editors.
 
 \chapter{Performance and Evaluation}\label{chapter:evaluation}
-\section{Field Test}
+\section{Field Test}\label{sec:field_test}
 To deploy our project in the field, we used IBM Cloud's free hosting service to run our node.js server and connect it to our MongoDB, as mentioned earlier Atlas instance. We tested the system over the course of eight days from Wednesday, the 29.01.20 to Wednesday, the 05.02.20. To find participants, we asked friends, acquaintances. We tried to recruit people in the vicinity and over private social media channels. Still, unfortunately, because of privacy concerns, we only found 13 volunteers to participate in the trial, of which only 5 to 7 devices were available over the whole test period. Because of Android's own battery management system and other OEM's aggressive battery saving algorithms, a lot of devices were not reachable after they have been unused for a longer period of time, entering Doze mode. Additionally, most of our users were fragmented globally, and with the low number of active participating devices, we had to adapt our aggregation parameters. To start aggregation processes, we use Postman,
 % Todo: \cite[Postman]
 a tool for sending REST requests directly to an address.
@@ -12,7 +12,7 @@ We started with aggregating data specified by Simon van Endern, such as steps da
 and partially in the sections below.
 
 \subsection{Data Consumption}
-Running the application by itself should not require a lot of data, as the only data consumption only comes from the initial registration request to the server, the periodical ping to the push service, and the aggregation requests. We let the application run for the first few days and aggregated data irregularly starting after the 29.01.20. But most of the requests were sent towards the end of the field test, on the 05.02.20 and the 06.02.20. In the figure \ref{fig:diagram_requests}, the distribution of the aggregation can be seen. We were able to request proof of data consumption from 4 participants, but are only able to confirm that some of them were actively providing data in requests. The provided screenshots can be viewed in the Appendix, and consumption is shown in table \ref{tab:data}. 
+Running the application by itself should not require a lot of data, as the only data consumption only comes from the initial registration request to the server, the periodical ping to the push service, and the aggregation requests. We let the application run for the first few days and aggregated data irregularly starting after the 29.01.20. But most of the requests were sent towards the end of the field test, on the 05.02.20 and the 06.02.20. In the Figure \ref{fig:diagram_requests}, the distribution of the aggregation can be seen. We were able to request proof of data consumption from 4 participants, but are only able to confirm that some of them were actively providing data in requests. The provided screenshots can be viewed in the Appendix, and consumption is shown in Table \ref{tab:data}. 
 
 \begin{figure}[htbp]
   \centering
@@ -46,7 +46,7 @@ We sent more than a hundred aggregation requests during the field test. We colle
 
 % Todo: inconsistency because of the epoch time difference
 
-We recorded the average time spent motionless was from 577 to around 1106 minutes. For individual participants, we have a wide gap with a minimum of 0 and a maximum of 1310 minutes, almost 22 hours, spent still, as depicted in figure \ref{fig:diagram_still}. This can be explained on the basis that for counting activities, we only use finished activities that have a start and an end timestamp. For the two cases, it was highly probable that the phone has not been used touched for two full days, and thus the start date of the activity was before the 31.01.20 and the end after the 01.02.20. For the low values of 16 minutes and 28 minutes, we have not found an explanation. 
+We recorded the average time spent motionless was from 577 to around 1106 minutes. For individual participants, we have a wide gap with a minimum of 0 and a maximum of 1310 minutes, almost 22 hours, spent still, as depicted in Figure \ref{fig:diagram_still}. This can be explained on the basis that for counting activities, we only use finished activities that have a start and an end timestamp. For the two cases, it was highly probable that the phone has not been used touched for two full days, and thus the start date of the activity was before the 31.01.20 and the end after the 01.02.20. For the low values of 16 minutes and 28 minutes, we have not found an explanation. 
 
 \begin{figure}[htbp]
   \centering
@@ -54,7 +54,7 @@ We recorded the average time spent motionless was from 577 to around 1106 minute
   \caption{Distribution of still raw values.} \label{fig:diagram_still}
 \end{figure}
 
-As for walking, figure \ref{fig:Diagram_Walking} shows a mean time between 25 and 75 minutes, from participants only walking 2 minutes up to 158 minutes. Without having the running time at hand, it is possible to infer that with the high number of steps recorded on half of the days, that one person is running regularly if the steps can be assigned to the same user.
+As for walking, Figure \ref{fig:Diagram_Walking} shows a mean time between 25 and 75 minutes, from participants only walking 2 minutes up to 158 minutes. Without having the running time at hand, it is possible to infer that with the high number of steps recorded on half of the days, that one person is running regularly if the steps can be assigned to the same user.
 
 \begin{figure}[htbp]
   \centering
@@ -72,7 +72,7 @@ On average, the participant uses a vehicle for up to 106 minutes. On occasion, m
 
 For cycling, on some days, we only had one value of around 7 minutes. We can assume with confidence that it is one specific participant that is using the bike on occasion.
 
-Now we take a look at the location and presence data. In the tables \ref{tab:location_cet} and \ref{tab:location_jst}, we can see the GPS coordinates that we get after the server suppresses them for k-anonymity. We do this because there is a lot of information if only one person in a greater area is present. If we collect only spatially cloaked area in the vicinity and we do this for several time points, we can assume with high confidence, the general trajectory of that user posing a risk to privacy.
+Now we take a look at the location and presence data. In the Tables \ref{tab:location_cet} and \ref{tab:location_jst}, we can see the GPS coordinates that we get after the server suppresses them for k-anonymity. We do this because there is a lot of information if only one person in a greater area is present. If we collect only spatially cloaked area in the vicinity and we do this for several time points, we can assume with high confidence, the general trajectory of that user posing a risk to privacy.
 
 \begin{table}[htbp]
 	\centering
@@ -147,7 +147,7 @@ Now we take a look at the location and presence data. In the tables \ref{tab:loc
 	\label{tab:location_cet}
 \end{table}
 
-According to the aggregated data, we have 2 to 7 participants throughout the field test. Table \ref{tab:location_jst} shows the location at 12 pm JST and table \ref{tab:location_cet} at 12 pm CET, which corresponds to 4 am CET and 8 pm JST in the other time zone. As already mentioned before, because of the fragmented participant pool, we set the desired location at any GPS coordinates. Still, the range to 50,000km and the accuracy to 0, which results in gives us a rough estimate in a 111km range.
+According to the aggregated data, we have 2 to 7 participants throughout the field test. Table \ref{tab:location_jst} shows the location at 12 pm JST and Table \ref{tab:location_cet} at 12 pm CET, which corresponds to 4 am CET and 8 pm JST in the other time zone. As already mentioned before, because of the fragmented participant pool, we set the desired location at any GPS coordinates. Still, the range to 50,000km and the accuracy to 0, which results in gives us a rough estimate in a 111km range.
 % Todo: \cite[GPS accuracy] 
 
 At 12 pm JST or 4 am CET, we have only two devices located in the greater Munich area with a midpoint of \((48.50108260577674, 11.495067909974292)\) which corresponds to the territory covered by \(\langle(48, 11),(49, 12)\rangle\). On the 30th and 31st of January, we detected three devices in the same region and, additionally, 2 participants close to \((35.50103138028429, 139.49688751384306)\) which represents the space between \(\langle(35, 139),(36, 140)\rangle\). For the rest of the field test, we can determine two devices in the general area of Munich and 2 in Tokyo most of the time.
@@ -183,7 +183,7 @@ But in contrast to reconstruction or linking attacks, tracing attacks could be u
 Because of the small sample size in our field test, we decided to run one more test in a more controlled environment for more reliable data. We use 10 Android Emulators on different versions of the operating system using Android Studio. We selected four small landmarks in a small area from which the devices travel from one of the other landmarks as a destination. This will ensure that we have devices that have been alone and together over the test period. For 10 minutes, each device generates location data along a predefined route in an interval of one second, totaling in 600 GPS coordinates. We use the emulator's route simulation, which leverages Google's Map API, giving us a travel speed of exactly 4.5km/h. We then aggregate the location data over the ten minutes for each minute and gather data using different accuracy parameters, giving us different approximate areas. This gives us more data to evaluate privacy issues, especially concerning historical location data.
 
 \subsection{Results}
-First, we chose an accuracy of 2 decimal places, which translates to real-world distances of around one kilometer. We were able to track 7-8 devices consistently in the areas depicted in figure \ref{fig:acc2}. The markers 1 and 2 span the area of \(\langle(35.54, 139.63),(35.55, 139.64)\rangle\) and the other two markers are \(\langle(35.53, 139.63),(35.54, 139.64)\rangle\). Table \ref{tab:location_sim2} shows how many devices were in which area at each time step. 
+First, we chose an accuracy of 2 decimal places, which translates to real-world distances of around one kilometer. We were able to track 7-8 devices consistently in the areas depicted in Figure \ref{fig:acc2}. The markers 1 and 2 span the area of \(\langle(35.54, 139.63),(35.55, 139.64)\rangle\) and the other two markers are \(\langle(35.53, 139.63),(35.54, 139.64)\rangle\). Table \ref{tab:location_sim2} shows how many devices were in which area at each time step. 
 
 \begin{table}[htbp]
 	\centering
@@ -250,7 +250,7 @@ Because the region we specified is large, we can almost always find multiple dev
   \caption{Spatially cloaked areas for an accuracy value of 3} \label{fig:acc3}
 \end{figure}
 
-For our next aggregation, we selected a precision of 3, which corresponds to roughly 100 meters. The data in table \ref{tab:location_sim3} reveals that we can find two mobile phones most of the time, with aggregations, in which we were able to find three devices or none at all. The areas are visible in figure \ref{fig:acc3}.
+For our next aggregation, we selected a precision of 3, which corresponds to roughly 100 meters. The data in Table \ref{tab:location_sim3} reveals that we can find two mobile phones most of the time, with aggregations, in which we were able to find three devices or none at all. The areas are visible in Figure \ref{fig:acc3}.
 
 \begin{table}[htbp]
 	\centering
@@ -294,7 +294,7 @@ For our next aggregation, we selected a precision of 3, which corresponds to rou
 	\label{tab:location_sim3}
 \end{table}
 
-Finally, we send requests with an accuracy of 4 or 10 meters. In this scenario, we were almost unable to register any devices, except for minute 10, see table \ref{tab:location_sim4}. At this time point, we have two users that pass each other in \(\langle(35.5372, 139.6336),(35.5373, 139.6337)\rangle\) as seen in figure \ref{fig:acc4}.
+Finally, we send requests with an accuracy of 4 or 10 meters. In this scenario, we were almost unable to register any devices, except for minute 10, see Table \ref{tab:location_sim4}. At this time point, we have two users that pass each other in \(\langle(35.5372, 139.6336),(35.5373, 139.6337)\rangle\) as seen in Figure \ref{fig:acc4}.
 
 \begin{table}[htbp]
 	\centering
@@ -337,9 +337,9 @@ Finally, we send requests with an accuracy of 4 or 10 meters. In this scenario, 
 \subsection{Privacy Evaluation}
 Looking at the documented results, we can see where devices meet each other. With low precision, we always register 3-4 users. Using k-anonymity, we are unable to find out more than the provided data. We only know the number of people present in a specific area. 
 
-After we increased precision to 3, we mostly see pairs. According to the table \ref{tab:location_sim3}, in the first 3 minutes, we can assume that two devices pass each other in the same area. Later one of them leaves the zone, and we stop registering that region. Without auxiliary information, we are unable to find out in which direction the users traveled or who left the area first. In minute 5 to 9, we register two adjacent regions. We can assume that there are more than two phones in the vicinity. Analyzing the historical spatial data, we suggest that we have two devices in area 2 and one device in zone 3 at minute 5. In the sixth minute, we register a new domain and loose the old one, indicating that one device moved from region 2 to 3 while the other two are still in their respective areas. In minute 9, we then see the old area again and the new one vanishing, suggesting that the device that was formerly in area 3 walked into zone 2. We were able to infer the travel direction of one device, but are still unable to point out the device.
+After we increased precision to 3, we mostly see pairs. According to the Table \ref{tab:location_sim3}, in the first 3 minutes, we can assume that two devices pass each other in the same area. Later, one of them leaves the zone, and we stop registering that region. Without auxiliary information, we are unable to find out in which direction the users traveled or who left the area first. In minute 5 to 9, we register two adjacent regions. We can assume that there are more than two phones in the vicinity. Analyzing the historical spatial data, we suggest that we have two devices in area 2 and one device in zone 3 at minute 5. In the sixth minute, we register a new domain and loose the old one, indicating that one device moved from region 2 to 3 while the other two are still in their respective areas. In minute 9, we then see the old area again and the new one vanishing, suggesting that the device that was formerly in area 3 walked into zone 2. We are able to infer the travel direction of one device, but are still unable to point out the device.
 
-Using an accuracy of 10 meters, we are unable to collect any useful data with the lack of devices.
+Using an accuracy of 10 meters, we are unable to collect any useful data. The lack of devices in such a small area resulted in mostly suppressed data.  
 
 \subsection{Usability}
 By stripping away all of the quasi-identifiers, we sacrifice a lot of possible usability in the data. But for the loss of value, we are able to preserve a lot of privacy and even provide anonymity. On the one hand, we will not be able to use the collected data for detailed medical research that requires sex, age, and other information. On the other hand, however, we can gather population density data and activity data, which are very handy in urban planning. This provides a good starting point to find a balance between the usability of data and the privacy of the data provider.
