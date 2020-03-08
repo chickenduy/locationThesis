@@ -36,7 +36,6 @@ In regards to location data, the ability to infer the home and work location pos
 % Todo: \cite[Inference Attacks on Location Tracks]
 % Todo: \cite[Please Forget Where I Was Last Summer: The Privacy Risks of Public Location (Meta)Data]
 % Todo: \cite[On the Anonymity of Home/Work Location Pairs]
-% Todo: \cite[Inference Attacks on Location Tracks]
 Location data is also able to hold more information than just spatial and temporal data. The association of a place with other sensitive information is possible. For example, the attendance of a political rally can tell an adversary about their political affiliation, or tracking the position of someone to a specialized clinic will expose private medical data.
 Besides, being able to analyze the movement pattern and predict the presence of people in a particular location may put their lives in danger. Predicting the presence of people in their homes alone or their absence might enable someone to break in and rob their house.
 
@@ -97,7 +96,7 @@ Former is realized by expanding specific attributes into ranges. For instance, i
 
 \subsection{Differential privacy}
 Differential privacy can be used to prevent statistical databases from leaking private information. It is a compelling mathematical definition that is able to guarantee privacy. An algorithm is differential private as long as it disables tracing attacks, meaning that output does not show signs of a particular individual is present in it or not.
-% Todo: \cite[The Algorithmic Foundationsof Differential Privacy]
+% Todo: \cite[The Algorithmic Foundations of Differential Privacy]
 % Todo: \cite[a lot of Dwork]
 Both Google and Apple have implemented differential privacy into their data collection methods.
 % Todo: \cite[https://ai.googleblog.com/2014/10/learning-statistics-with-privacy-aided.html]
@@ -157,7 +156,7 @@ The Figure \ref{fig:casper} would show the lowest level of detail with \(\langle
 \subsubsection{Interval Cloaking}
 Similarly to Casper, Interval Cloaking also uses rectangular cloaking areas to hide the real locations. But instead of using neighboring squares, it uses the lower level of detail to achieve k-anonymity. Using the example from above, Interval Cloaking would span the anonymized spatial area over \(\langle(0,2),(2,4)\rangle\) to assure k-anonymity with \(k=4\) for \(U_1\).
 % Todo: \cite[Spatial Cloaking Revisited/ Distinguishing Information Leakage from Anonymity.pdf.pdf]
-% Todo: \cite[Privacy Enhancing Technologies pp 393-412]
+% Todo: \cite[Preserving User Location Privacy in Mobile Data Management Infrastructures]
 
 \subsubsection{Hilbert Cloaking}
 Another famous spatial cloaking algorithm is Hilbert Cloaking
