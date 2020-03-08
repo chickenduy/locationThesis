@@ -5,8 +5,8 @@
 While it is hard to strike a balance between anonymity and usability, we think we found a starting point on which we can build for a more scalable, secure, and privacy-preserving platform for collecting, aggregating, and analyzing of mobility data.
 
 \section{Research Questions}
-\subsection*{RQ1: What are the benefits and drawbacks in Simon van Endern's architecture and what improvements are possible?}
-After examination, we found that Simon van Endern managed to collect a lot of data while preserving privacy. Additionally, his idea provided a very secure communication infrastructure using a hybrid encryption scheme. His proposal, however, wasn't able to scale because of it, creating long wait times for data collection.
+\subsection*{RQ1: What are the benefits and drawbacks in van Endern's architecture and what improvements are possible?}
+After examination, we found that van Endern managed to collect a lot of data while preserving privacy. Additionally, his idea provided a very secure communication infrastructure using a hybrid encryption scheme. His proposal, however, wasn't able to scale because of it, creating long wait times for data collection.
 Furthermore, the single aggregation chain leads to to a quadratic growth in data consumption, and our current data plans are unable to carry that burden. On the upside, the lone series of collection hides the connection between the data and the device. On the downside, his implementation of forwarding requests using a polling system over HTTPS creates a drain on the battery.
 Another flaw in the design is the selection process of the next device. Giving the server the ability to choose the following target allows it to choose compromised users and to endanger their privacy. 
 
@@ -19,9 +19,7 @@ We added raw values to the aggregation of steps and activities as we saw no infr
 We found that similar to other types of data, the number of participants is vital to protect their identity or at least their association. Using suppression, we are unable to hide devices, that are on their own. In chapter 5, we tested the platform in the field and a controlled setting. We were unable to draw any reliable conclusions regarding the usability of the collected data because of the lack of participants in our deployed field test. Regarding privacy, however, we don't see any way how the data can be used to infer more sensitive data or even identity. The spatial cloaking mechanism successfully hides the real location of the devices while revealing interesting statistical data. In the simulated test, we were able to collect much more reliable data. We were able to deduce the travel direction of one unidentified device but were unable to trace it back to other information.
 
 \subsection*{RQ5: Can we use the current state of peer-to-peer technology to remove intermediate third parties?}
-Chapter 4 has shown our attempt to implement peer-to-peer technology into a mobile application. We have identified Textile as a viable candidate for our project, but unfortunately, one of the most important aspects didn't meet our expectations. There is a lot of progress in that aspect of technology, but some work still has to be done before it can be used in production. We should also look into decentralized communication standards, such as matrix
-% Todo: \cite[https://matrix.org/]
-, that can be used as an alternative to our initial direct communication approach.
+Chapter 4 has shown our attempt to implement peer-to-peer technology into a mobile application. We have identified Textile as a viable candidate for our project, but unfortunately, one of the most important aspects didn't meet our expectations. There is a lot of progress in that aspect of technology, but some work still has to be done before it can be used in production. We should also look into decentralized communication standards, such as matrix \cite{matrix}, that can be used as an alternative to our initial direct communication approach.
 
 \section{Limitations}
 As mentioned before, there are a lot of short-term obstacles that we identified that could be improved and some that warrant further research in the long-term.
@@ -42,9 +40,7 @@ As discussed in the earlier chapters, homomorphic encryption could be an excelle
 
 Another technique to strengthen privacy would be to give the users the control to participate in the data collection themselves. An option in which they can decide what level of privacy the collected data holds. I.e., either setting the collection to very private, so that all data gathered with the option is protected from aggregation or just changing the privacy level of the data itself.
 
-Also mentioned in the section above is that trust is a topic that can't be handled lightly. Either intentionally providing false information or trying to trace or link private data to a device are possible motives for a malicious user. To combat misinformation and privacy leaks, there has to be a way to establish trust. Pouryazdan et al.
-% Todo: \cite[Quantifying User Reputation Scores, Data Trustworthiness, and User Incentives in Mobile Crowd-Sensing]
-suggest a score to measure the reputation, which in our eyes could either help with data reliability or create a new quasi-identifier for adversaries to exploit.
+Also mentioned in the section above is that trust is a topic that can't be handled lightly. Either intentionally providing false information or trying to trace or link private data to a device are possible motives for a malicious user. To combat misinformation and privacy leaks, there has to be a way to establish trust. Pouryazdan et al. \cite{DBLP:journals/access/PouryazdanKSFS17} suggest a score to measure the reputation, which in our eyes could either help with data reliability or create a new quasi-identifier for adversaries to exploit.
  
 \subsection{Server}
 Trust is also an issue for the server. With scandals constantly being reported on, the public trust in corporations and organizations collecting sensitive data is waning. Establishing the server as a trustworthy instance that doesn't mishandle the collected data by enhancing privacy or guaranteeing anonymity would be a step in the right direction. Relinquishing control over the data from a centralized architecture into a decentralized one would be an even bigger step and give the users more protection.

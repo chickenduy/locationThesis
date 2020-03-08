@@ -7,10 +7,8 @@ To create a platform that both produces useful data while protecting the privacy
  
 In any platform, we expect a certain level of trust from each participant, may it be from the service provider or its consumer. How this trust is created can have many different sources. But the main reason a person or organization can be trusted is because of accountability. Companies with a strong market presence have the public's trust since they have been present for a longer period of time and ca not just disappear overnight
  Consequently, they can be held accountable for their actions. Today, Microsoft, Google, Amazon, and Facebook, for instance, are seen as trustworthy to a certain degree. But this trust is not invulnerable. Lies and secrecy can damage trust. Keeping the public uninformed about severe data breaches or selling sensitive data to third parties without their knowledge and permission has strained the public trust in recent years.
-% Todo: \cite[Facebook Cambridge Analytica]
 
 Even if the trust is in place, we as consumers require privacy. If we can guarantee anonymity, however, we can also guarantee privacy, as re-identification should be impossible at that point.
-% Todo: \cite[Dictionary]
 
 As chapter 2 has shown, it is a hard task to anonymize big data sets, as quasi-identifiers can be used to infer new information using linking attacks. So one way to achieve anonymity would be to strip away all attributes that could be used in another data set.
 
@@ -21,7 +19,7 @@ meaning that either that the data itself is not de-identified because of possibl
 So there is a need to find a way to find a balance between trust, usability, and privacy. Due to the limited scope of the thesis, we focus on the privacy of the crowd and the usability of their collected data. We assume that all participating devices and servers can be trusted, and possible adversaries only have access to the published end results.
 
 \section{Approaches}
-As mentioned in the beginning, there are advantages and disadvantages to Simon van Endern's system, and we explore how we can implement improvements and if they would be feasible with the current state of the art or if another alternative has to be chosen.
+As mentioned in the beginning, there are advantages and disadvantages to van Endern's \cite{simon} system, and we explore how we can implement improvements and if they would be feasible with the current state of the art or if another alternative has to be chosen.
 
 \subsection{Simon van Endern's Approach}
 The proposed architecture implemented in his thesis was using a centralized approach with a distributed storage solution. The model can be seen in Figure \ref{fig:simon_original}.
@@ -29,7 +27,7 @@ The proposed architecture implemented in his thesis was using a centralized appr
 \begin{figure}[htpb]
   \centering
   \includegraphics[width=0.8\textwidth]{figures/simon_original.png}
-  \caption{Simon van Endern's original architecture.} \label{fig:simon_original}
+  \caption{Simon van Endern's original architecture \cite{simon}} \label{fig:simon_original}
 \end{figure}
 
 In his work, he eliminates the need for a central database, by collecting and storing raw data directly on the users' smartphone, creating kind of a distributed database. This gives each participant a lot of control over their own data, just by deleting the application or disabling internet connection they are able to opt-out of future data analyses.
@@ -46,9 +44,9 @@ In the finite scope, he managed to implement three aggregation types:
 We examined his work and discovered a few flaws that we might be able to refine. We will look into possible solutions to make the architecture more efficient, scalable, secure, and privacy-preserving.
 
 \subsection{Expanded Approach}
-Simon van Endern's original idea, as is, can hardly be scaled because of the nature of its forwarding chain. Adding \(n\) new devices creates a linear time complexity of \(\mathcal{O}(n)\) and space complexity of \(\mathcal{O}(n^2)\). For every device added, the aggregation takes up to an additional 15 minutes, and the data fetched and sent is the data of all previous devices combined, making it quite a burden on each participant's data plan depending on their position in the chain.
+Van Endern's original idea, as is, can hardly be scaled because of the nature of its forwarding chain. Adding \(n\) new devices creates a linear time complexity of \(\mathcal{O}(n)\) and space complexity of \(\mathcal{O}(n^2)\). For every device added, the aggregation takes up to an additional 15 minutes, and the data fetched and sent is the data of all previous devices combined, making it quite a burden on each participant's data plan depending on their position in the chain.
 
-Our first goal is to make the platform more efficient and scalable. We propose to parallelize the chains by building multiple groups for the aggregation, as shown in Figure \ref{fig:ar}. Each chain in itself resembles Simon van Endern's original idea in Figure \ref{fig:simon_original}. With \(m\) groups, adding \(n\) devices, it only creates a time complexity of \(\mathcal{O}(\dfrac{n}{m})\) and space complexity of \(\mathcal{O}((\dfrac{n}{m})^2)\). So choosing dynamically the right \(m\) could change linear and quadratic growth to potentially constant growth. 
+Our first goal is to make the platform more efficient and scalable. We propose to parallelize the chains by building multiple groups for the aggregation, as shown in Figure \ref{fig:ar}. Each chain in itself resembles van Endern's original idea in Figure \ref{fig:simon_original}. With \(m\) groups, adding \(n\) devices, it only creates a time complexity of \(\mathcal{O}(\dfrac{n}{m})\) and space complexity of \(\mathcal{O}((\dfrac{n}{m})^2)\). So choosing dynamically the right \(m\) could change linear and quadratic growth to potentially constant growth. 
 
 \begin{figure}[htbp]
   \centering
@@ -65,7 +63,7 @@ Our first goal is to make the platform more efficient and scalable. We propose t
 
 Initially, we thought to aggregate data on a final device instead using our central server. We choose against that design because of limited data coverage for mobile devices. Most mobile phone plans have a data cap they are able use after which bandwidth is throttled. Keeping this limit in mind we opted for the collection of the data on the server, sacrificing a little bit of privacy for the deficits of mobile computing.
 
-Another flaw to Simon van Endern's architecture is the constant polling for new aggregation requests. Each user asks for a request targeted at their device and will do so every 15 minutes. Depending on the number of participants in the project, this could mean up to millions of messages to the server every few minutes. To avoid this, we explore some peer-to-peer frameworks that can send data directly to the next target device to cut down on forwarding delays and remove intermediate third parties.
+Another flaw to van Endern's architecture is the constant polling for new aggregation requests. Each user asks for a request targeted at their device and will do so every 15 minutes. Depending on the number of participants in the project, this could mean up to millions of messages to the server every few minutes. To avoid this, we explore some peer-to-peer frameworks that can send data directly to the next target device to cut down on forwarding delays and remove intermediate third parties.
 
 As we assume that there might be possible privacy leaks, we also consider the inclusion of local differential privacy to protect the collected data. We look into the benefits and the disadvantages that the implementation of this mechanism could bring in our design.
 

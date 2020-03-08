@@ -7,15 +7,11 @@ The following sections describe the implementation and explain the design decisi
 
 \section{Technology Stack}
 
-As our mobile platform, we have to decide between iOS and Android. While iOS has a more up-to-date operating system with 70\% of all of their mobile phones running iOS 13 and 23\% running iOS 12, Android has a much bigger market share with around 74\% compared to Apple's 25\%. 
-% Todo: \cite[https://www.statista.com/statistics/272698/global-market-share-held-by-mobile-operating-systems-since-2009/]
-% Todo: \cite[https://gs.statcounter.com/os-market-share/mobile/worldwide]
+As our mobile platform, we have to decide between iOS and Android. While iOS has a more up-to-date operating system with 70\% of all of their mobile phones running iOS 13 and 23\% running iOS 12, Android has a much bigger market share with around 74\% compared to Apple's 25\%\cite{android1}\cite{android2}.
 
 In terms of available development kits and libraries, both platforms provide plenty of choices. In the end, we choose Android, mainly because of their ease of deployment on devices for test scenarios. As for programming language, we opt for Kotlin instead of Java because of their intuitive syntax and compact and more readable codebase.
 
-On the server-side of development, we select Node.js using Typescript combined with MongoDB's cloud storage solution, Atlas. Node.js provides a lot of flexibility with its vast ecosystem of third-party packages, and MongoDB, as a NoSQL database, easily stores and combines any type of data, allowing quick changes in the data model.
-% Todo: \cite[https://nodejs.org/en/]
-% Todo: \cite[https://www.mongodb.com/cloud/atlas]
+On the server-side of development, we select Node.js \cite{node} using Typescript combined with MongoDB's \cite{mongo} cloud storage solution, Atlas. Node.js provides a lot of flexibility with its vast ecosystem of third-party packages, and MongoDB, as a NoSQL database, easily stores and combines any type of data, allowing quick changes in the data model.
 
 Our aggregation results can be fetched over the REST API or viewed directly in the MongoDB Atlas interface, given access privileges.
 
@@ -77,8 +73,7 @@ The following arguments are used in the search options:
     \item \textit{start} and \textit{end} or \textit{date}: time of interest as an epoch integer
     \item \textit{lat} and \textit{lon}: coordinates of the point of interest as floating point integers
     \item \textit{radius}: distance to the point of interest in km as integer
-    \item \textit{type}: type of activity as encoded in the Google Activity API
-    % Todo: \cite[https://developers.google.com/android/reference/com/google/android/gms/location/DetectedActivity.html] 
+    \item \textit{type}: type of activity as encoded in the Google Activity API \cite{detectedactivity}
     \item \textit{accuracy}: position after the comma to round for GPS accuracy as integer
     \item \textit{anonymity}: selected k for k-anonymity as integer
 \end{itemize}
@@ -160,8 +155,7 @@ After receiving and adding their data, the phones encrypt the \textit{data} JSON
 The implementation of the different JSON formats are flexible and can accommodate more aggregation types. The next sections will describe the features and the process of aggregation more in-depth from the Android device's and the server's point of view.
 
 \section{Android Application}
-As our target version of Android, we choose Android 10 (API level 29), which is currently the latest version of Android, and as a minimum version, we select Android KitKat (API level 19). The latest report shows that around 98\% are on Android KitKat or later. To collect mobility data, we leverage the power of Google Play Services. For persistent storage, we make use of the Room Persistence Library, as it provides an abstraction layer over SQLite and is commonly used in a lot of Android applications.
-% Todo: \cite[https://developer.android.com/topic/libraries/architecture/room]
+As our target version of Android, we choose Android 10 (API level 29), which is currently the latest version of Android, and as a minimum version, we select Android KitKat (API level 19). The latest reports \cite{android3}\cite{android4} show that around 98\% are on Android KitKat or later. To collect mobility data, we leverage the power of Google Play Services. For persistent storage, we make use of the Room Persistence Library \cite{room}, as it provides an abstraction layer over SQLite and is commonly used in a lot of Android applications.
 
 Because the platform relies on the generation of data from the crowd, the main functions of the application are the collection of mobility data and providing the data on request. Figure \ref{fig:modules} describes the android applications with three main packages:
 
@@ -177,14 +171,13 @@ Because the platform relies on the generation of data from the crowd, the main f
   \caption{Overview of the Android architecture} \label{fig:modules}
 \end{figure}
 
-On starting up, the application opens into the \textit{Main Activity}, where it asks the users for permission to access location services. On acceptance, the application starts the background services for data collection explained in the next section. It also serves the purpose of displaying stored data. A screen for each type is implemented: steps, activities, and GPS. Using Simon van Endern's Android application as a blueprint, we implement the same features to keep our application running behind the scenes. Because of background limitations Android introduced with Android Oreo, we create a non-dismissible notification that is displayed in the status bar and the notification center. This turns the application into a foreground application, bypassing the limitations set in the newer Android versions. To keep user interaction to a minimum, we enable the application to reopen when it crashes or is closed, and when it is rebooted.
+On starting up, the application opens into the \textit{Main Activity}, where it asks the users for permission to access location services. On acceptance, the application starts the background services for data collection explained in the next section. It also serves the purpose of displaying stored data. A screen for each type is implemented: steps, activities, and GPS. Using van Endern's Android application as a blueprint, we implement the same features to keep our application running behind the scenes. Because of background limitations Android introduced with Android Oreo, we create a non-dismissible notification that is displayed in the status bar and the notification center. This turns the application into a foreground application, bypassing the limitations set in the newer Android versions. To keep user interaction to a minimum, we enable the application to reopen when it crashes or is closed, and when it is rebooted.
 
 \subsection{Data Collection}
 After the users successfully accept all permissions, the \textit{Main Activity}, starts the \textit{Background Service}. The \textit{Background Service}, in turn, starts four tasks that have been shown in Figure \ref{fig:modules}. The four modules are loosely coupled and have been separated by data type or task at hand. We split the application into data collection and data aggregation. The aggregation process will be further explained in the next section. The data collection has three modules:
 \begin{itemize}
     \item \textit{Steps Service}: This module handles two classes, the step service, and the step logger. If the mobile phone has a pedometer, it registers the sensor to update the step count. The step logger receives steps from the sensor and stores it in the \textit{steps\_table} ever minute. Every step entry has an \textit{start} and \textit{end} timestamp and the number of steps taken in that time frame as \textit{steps}.
     \item \textit{Activities Service}: This service, similar to the \textit{Steps Service}, is composed of the activities service and the activities logger classes. The activities service leverages Google's Activity Recognition API to identify the current activity of the mobile device. We are only interested in the main activities: still, walking, running, on a bicycle or in a vehicle. Therefore, for all possible activities, we register the transition type of entering or exiting the activity. Whenever we switch activities, the activities logger writes the \textit{timestamp}, the \textit{type} and wether we \textit{enter}ed or not into the \textit{activities\_table}. Additionally, we store the exited activity into the \textit{activitiesDetailed\_table} with the \textit{start} and \textit{end} timestamp and the \textit{type}.
-% Todo: \cite[https://developers.google.com/android/reference/com/google/android/gms/location/DetectedActivity]
      \item \textit{GPS Service}: This part of the application has the same structure as the others described above. The GPS service accesses Google's Fused Location Provider API to collect location data. The API itself uses the GPS sensor as well as the network sensors in the device to determine device location. We make the location sample rate dependent on the current activity because the positional changes between \textit{still} and \textit{on a bicycle}, for example, are very different. So we set the interval to 5 minutes for \textit{still}, 30 seconds for \textit{walking} and 15, 5 and once per second for \textit{running}, \textit{on a bicycle} and \textit{in a vehicle} respectively. Every once in a while, the GPS logger receives batches of data from the API and saves them into the \textit{gps\_table} with their  \textit{timestamp}, \textit{lat}itude and \textit{lon}gtitude.
 \end{itemize}
 
@@ -192,19 +185,14 @@ After the users successfully accept all permissions, the \textit{Main Activity},
 The last part of the background services is the \textit{Communication Service}. This is in charge of passing on data from the server or devices to the next target. For this interface, we have several ideas in mind.
  
 \subsubsection{Peer-to-peer technology}
-To take out the central server as an intermediary as implemented in Simon van Endern's version, we searched for libraries and SDKs that could be viable for our platform. We found the open-source projects, IPFS and libp2p, which are trying to be the foundation of the decentralized and distributed web. IPFS uses hashes to create content identifiers and turns them into blocks in a directed acyclic graph. To discover the peers with the content it uses a distributed hash table, using the modular P2P networking stack libp2p to communicate between nodes.
-% Todo: \cite[IPFS] 
+To take out the central server as an intermediary as implemented in van Endern's version, we searched for libraries and SDKs that could be viable for our platform. We found the open-source projects, IPFS \cite{DBLP:journals/corr/Benet14} and libp2p \cite{libp2p}, which are trying to be the foundation of the decentralized and distributed web. IPFS uses hashes to create content identifiers and turns them into blocks in a directed acyclic graph. To discover the peers with the content it uses a distributed hash table, using the modular P2P networking stack libp2p to communicate between nodes.
 
 Textile leverages the strength of both technologies. Their main feature threads, a hash-chain of blocks that can represent any type of dataset, which we could use to send data directly from device to device. Unfortunately, after further investigation, the Textile SDK is not viable in its current state because it is unable to keep the node in Android alive after going into the background or turning off the device screen. It is essential for data collection and aggregation to keep communication channels available throughout the whole lifetime of the application.
 
 Thus we opted to instead use a third-party push notification service as an intermediary to forward the messages between the server and other devices.
 
 \subsubsection{Push}
-To replace Simon van Ender's polling with an event-based action architecture, Figure \ref{fig:ar2} shows our new design. For our push service, we select Pushy
-% Todo: \cite[Pushy]
-because of their free entry barrier and independence from big tech companies, as well as having implementations for both iOS and Android. We could also have used Firebase Cloud Messaging to forward messages. Additionally, Pushy makes use of MQTT
-% Todo: \cite[http://mqtt.org/]
-, a light-weight messaging protocol that uses a small amount of bandwidth. Of course, the modular architecture of the app enables us to swap this method of communication for a P2P solution as soon as one proves applicable.
+To replace Simon van Ender's polling with an event-based action architecture, Figure \ref{fig:ar2} shows our new design. For our push service, we select Pushy \cite{pushy} because of their free entry barrier and independence from big tech companies, as well as having implementations for both iOS and Android. We could also have used Firebase Cloud Messaging to forward messages. Additionally, Pushy makes use of MQTT \cite{mqtt}, a light-weight messaging protocol that uses a small amount of bandwidth. Of course, the modular architecture of the app enables us to swap this method of communication for a P2P solution as soon as one proves applicable.
 
 \begin{figure}[htbp]
   \centering
@@ -259,13 +247,7 @@ Differential privacy heavily depends on the sensitivity of the data. That is the
 We considered implementing differential privacy, but ultimately decided against it. The global mechanism requires the server to have access to all raw values, while the local approach would add too much noise. In addition, differential private algorithms can currently only applied to simple data schemes, such as sums and counts, which would work with steps, activities and presence data, but couldn't be applied to location. Also, because of the high sensitivity of the values, because of our lack of participants, we are unable to cancel out the accumulated noise, basically making our collected data useless.
 
 \section{Server}
-For our server, we are using Node.js,
-% Todo: \cite[https://nodejs.org/en/]
-on version 12.12.21 with the express middleware, a minimal web application framework.
-% Todo: \cite[https://expressjs.com/]
-Our MongoDB Atlas database instance
-% Todo: \cite[https://www.mongodb.com/cloud/atlas]
-receives data over the database communication module. The architecture can be seen in Figure \ref{fig:server}.
+For our server, we are using Node.js, on version 12.12.21 with the express \cite{express} middleware, a minimal web application framework. Our MongoDB Atlas database instance receives data over the database communication module. The architecture can be seen in Figure \ref{fig:server}.
 
 \begin{figure}[htpb]
   \centering
@@ -291,6 +273,6 @@ To achieve privacy with data as sensitive as whereabouts, we apply k-anonymity. 
 \section{Limitations}
 Even with the proposed solutions, the architecture is still far from perfect. While the data should be confidential because of the state-of-the-art encryption, we still have to rely on a third party to deliver messages, making us dependent on their availability.
 
-With Simon van Endern's aggregation chain, the most vulnerable participants would be the first because next in line would always be able to see the raw data they added. Unfortunately, homomorphic encryption is still computationally expensive, and there are currently no available libraries for Android to implement it.
+With van Endern's aggregation chain, the most vulnerable participants would be the first because next in line would always be able to see the raw data they added. Unfortunately, homomorphic encryption is still computationally expensive, and there are currently no available libraries for Android to implement it.
 
 Another issue that can lead to privacy issues is centralization. While the raw data itself is distributed, the control over aggregated data, its storage, and its collection is still under one central authority.
