@@ -1,7 +1,7 @@
 % !TeX root = ../main.tex
 % Add the above to each chapter to make compiling the PDF easier in some editors.
 
-\chapter{Related Work}\label{chapter:relatedwork}
+\chapter{Background}\label{chapter:relatedwork}
 \section{Risks}
 While working with sensitive data, we have to assess multiple attack vectors before we can take action. We compile possible attack vectors and how they could be solved.
 
@@ -31,8 +31,8 @@ Besides, being able to analyze the movement pattern and predict the presence of 
 \section{Countermeasures}
 To implement a secure platform that is less vulnerable to the problems proposed in the sections above, we look into methods and design decisions to prevent them.
 \subsection{Distribution and decentralization}
-When the Advanced Research Projects Agency Network (ARPANET) implemented the prototype of the internet in 1969, it was a decentralized network of computers scattered across the United States. With the adoption of the TCP/IP in 1982, it became the internet, an interconnected network of networks as we have today \cite{DBLP:books/daglib/0006297}.
-In 1989, Tim Berners-Lee introduced the world wide web as a read-only means of accessing information from other computers, and the commercialization turned it into the centralized web we know today. 
+When the Advanced Research Projects Agency Network (ARPANET) implemented the prototype of the Internet in 1969, it was a decentralized network of computers scattered across the United States. With the adoption of the TCP/IP in 1982, it became the Internet, an interconnected network of networks as we have today \cite{DBLP:books/daglib/0006297}.
+In 1989, Tim Berners-Lee introduced the World Wide Web as a read-only means of accessing information from other computers, and the commercialization turned it into the centralized web we know today. 
 
 The dangers of data breaches can originate from outside the companies as well as inside, and their cause range from poorly implemented security and lax security policies to human error \cite{riskbasedsecurity}.
 Figure \ref{fig:comparison} depicts two alternatives in place of a centralized architecture: distributed and decentralized.
@@ -40,14 +40,14 @@ Figure \ref{fig:comparison} depicts two alternatives in place of a centralized a
 \begin{figure}[htpb]
   \centering
   \includegraphics[width=0.8\textwidth]{figures/comparison.jpg}
-  \caption{Illustration of a centralized, distributed and decentralized architecture \cite{distributed}} 
+  \caption{Comparison between centralized, distributed and decentralized architecture \cite{distributed}} 
   \label{fig:comparison}
 \end{figure}
 
 In the last decade, we have seen a rise in attempts to reorganize the internet. This trend amassed attention in 2009 when the creator under the pseudonym Satoshi Nakamoto  \cite{bitcoin} created Bitcoin, "A Peer-to-Peer Electronic Cash System" leveraging blockchain technology, followed by the Ethereum \cite{ethereum} platform in 2013.
 The goal of decentralization is the separation of power from a single instance. In our case, it would be to take away control from monopolies over our data. 
 
-One of the protocols that arose from this niche is the InterPlanetary File System (IPFS)\cite{DBLP:journals/corr/Benet14}. IPFS is a peer-to-peer hypermedia protocol to make the web more decentralized and distributed. A node can upload a file, and every file and its blocks generate a cryptographic hash, making it content addressable. Requesting a file will search the network for nodes that store it, and the nodes that have it will provide.
+One of the protocols that arose from this niche is the InterPlanetary File System (IPFS) \cite{DBLP:journals/corr/Benet14}. IPFS is a peer-to-peer hypermedia protocol to make the web more decentralized and distributed. A node can upload a file, and every file and its blocks generate a cryptographic hash, making it content addressable. Requesting a file will search the network for nodes that store it, and the nodes that have it will provide.
 
 Distribution takes decentralization a step further by eliminating the central control by giving all instances the same amount of power. Using distributed storage, in place of a centralized database, removes the single point of vulnerability and lowers the effort-to-reward balance and thus might deter malicious actors from trying to steal data.
 
@@ -88,7 +88,7 @@ If the noise function is applied to the entire aggregated raw data set, it is ca
 \begin{figure}[htpb]
   \centering
   \includegraphics[width=0.8\textwidth]{figures/global_diff.png}
-  \caption{Illustration of a global differential data flow\cite{desfontaines}}
+  \caption{Data flow in a global differential private query \cite{desfontaines}}
   \label{fig:global_diff}
 \end{figure}
 
@@ -98,7 +98,7 @@ Figure \ref{fig:local_diff} shows that differential privacy can also be used on 
 \begin{figure}[htpb]
   \centering
   \includegraphics[width=0.8\textwidth]{figures/local_diff.png}
-  \caption{Illustration of a local differential data flow \cite{desfontaines}} 
+  \caption{Data flow in a local differential private query \cite{desfontaines}} 
   \label{fig:local_diff}
 \end{figure}
 
@@ -108,12 +108,12 @@ A typical example of this is the coin toss. A survey asks a question that can be
 As mentioned above, spatial data can reveal a lot of sensitive information about a person. So location privacy should always be a high priority. Many algorithms can be used to hide the real location in a general area.
 
 \subsubsection{Casper}
-Casper \cite{DBLP:journals/tods/ChowMA09} is a grid-based cloaking mechanism that organizes the location in squares and structures the level of detail like a pyramid. It cloaks the real coordinates by using the lower-left corner and upper-right corners as a designated area of the location \cite{DBLP:conf/ssd/TanLM09}. The Figure \ref{fig:casper} would show the lowest level of detail with \(\langle(0,0),(4,4)\rangle\), covering the whole area, and the highest level of detail with \(\langle(0,2),(1,3)\rangle\), only wrapping a small portion of the area. The algorithm looks for neighboring areas for other users and then spans the whole area when it finds one to fulfill the requirements of k-anonymity. For example, \(U_1\) with its cloaked area \(\langle(0,2),(1,3)\rangle\) would need the area \(\langle(1,2),(2,3)\rangle\) to satisfy \(k=4\).
+Casper \cite{DBLP:journals/tods/ChowMA09} is a grid-based cloaking mechanism that organizes the location in squares and structures the level of detail like a pyramid. It cloaks the real coordinates by using the lower-left corner and upper-right corners as a designated area of the location \cite{DBLP:conf/ssd/TanLM09}. Figure \ref{fig:casper} would show the lowest level of detail with \(\langle(0,0),(4,4)\rangle\), covering the whole area, and the highest level of detail with \(\langle(0,2),(1,3)\rangle\), only wrapping a small portion of the area. The algorithm looks for neighboring areas for other users and then spans the whole area when it finds one to fulfill the requirements of k-anonymity. For example, \(U_1\) with its cloaked area \(\langle(0,2),(1,3)\rangle\) would need the area \(\langle(1,2),(2,3)\rangle\) to satisfy \(k=4\).
 
 \begin{figure}[htpb]
   \centering
   \includegraphics[width=0.5\textwidth]{figures/casper.png}
-  \caption{Illustration of spatially cloaked squared areas} 
+  \caption{Spatial cloaked areas with users} 
   \label{fig:casper}
 \end{figure}
 
@@ -121,4 +121,4 @@ Casper \cite{DBLP:journals/tods/ChowMA09} is a grid-based cloaking mechanism tha
 Similarly to Casper, Interval Cloaking also uses rectangular cloaking areas to hide the real locations. However, instead of using neighboring squares, it uses a lower level of detail to achieve k-anonymity. Using the example from above, Interval Cloaking would span the anonymized spatial area over \(\langle(0,2),(2,4)\rangle\) to assure k-anonymity with \(k=4\) for \(U_1\) \cite{DBLP:conf/ssd/TanLM09}\cite{DBLP:conf/pet/ChengZBP06}.
 
 \subsubsection{Hilbert Cloaking}
-Another famous spatial cloaking algorithm is Hilbert Cloaking \cite{DBLP:conf/socialcom/UmKC10}. It uses the Hilbert space-filling curve to map the 2-dimensional area into a 1-dimensional representation. Then it groups together points depending on the provided \(k\) because points that are in proximity on the Hilbert curve are also close to each other in 2D. Instead of using predetermined rasterization of the area, the cloaked area is spanned by the users themselves \cite{DBLP:journals/is/GhinitaZPK10}\cite{DBLP:journals/sigkdd/Gkoulalas-DivanisKV10},\cite{DBLP:conf/ssd/TanLM09}.
+Another famous spatial cloaking algorithm is Hilbert Cloaking \cite{DBLP:conf/socialcom/UmKC10}. It uses the Hilbert space-filling curve to map the 2-dimensional area into a 1-dimensional representation. Then it groups together points depending on the provided \(k\) because points that are in proximity on the Hilbert curve are also close to each other in 2D. Instead of using predetermined rasterization of the area, the cloaked area is spanned by the users themselves \cite{DBLP:journals/is/GhinitaZPK10}\cite{DBLP:journals/sigkdd/Gkoulalas-DivanisKV10}\cite{DBLP:conf/ssd/TanLM09}.

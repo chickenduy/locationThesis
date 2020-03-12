@@ -8,34 +8,14 @@ To deploy our project in the field, we used IBM Cloud's free hosting service to 
 We started with aggregating data specified by van Endern, such as steps data and activities data, and afterward, we looked into location data and presence data. The collected data sets can be found in the Git repository \cite{results} and partially in the sections below.
 
 \subsection{Data Consumption}
-Running the application by itself should not require a lot of data, as the only data consumption only comes from the initial registration request to the server, the periodical ping to the push service, and the aggregation requests. We let the application run for the first few days and aggregated data irregularly starting after the 29.01.20. However, we sent most of the requests towards the end of the field test, on the 05.02.20 and the 06.02.20. In the Figure \ref{fig:diagram_requests}, the distribution of the aggregation can be seen. We were able to request proof of data consumption from 4 participants, but are only able to confirm that some of them were actively providing data in requests. The provided screenshots can be viewed in the Appendix, and consumption is shown in Table \ref{tab:data}. 
+Running the application by itself should not require a lot of data, as the only data consumption only comes from the initial registration request to the server, the periodical ping to the push service, and the aggregation requests. We let the application run for the first few days and aggregated data irregularly starting after the 29.01.20. However, we sent most of the requests towards the end of the field test, on the 05.02.20 and the 06.02.20. In the Figure \ref{fig:diagram_requests}, the distribution of the aggregation can be seen. We were able to request proof of data consumption from 4 participants, but are only able to confirm that some of them were actively providing data in requests. The provided screenshots can be viewed in the Appendix. 
 
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=0.8\textwidth]{figures/diagram_requests.png}
-  \caption{Simon van Endern's original architecture.} \label{fig:diagram_requests}
+  \caption{Distribution of requests during the field test.} \label{fig:diagram_requests}
 \end{figure}
-
-\begin{table}[htbp]
-    \centering
-    \begin{tabular}{|c|} 
-        \hline
-        \textbf{Data consumption}\\ [0.5ex] 
-        \hline
-        3.43 MB \\
-        \hline
-        3.98 MB \\
-        \hline
-        2.9 MB \\
-        \hline
-        7.89 MB \\
-        \hline
-    \end{tabular}
-    \caption{Data consumption of devices during the test period }
-    \label{tab:data}
-\end{table}
-
-We can see in all cases that data consumption did not exceed 10MB and, in most cases, did not even use more than 5MB. We could extrapolate that the consumption of data should not be a lot more than twice, depending on the number of aggregation requests sent because the parallelization of the data collection should always aim for small groups.
+The consumption reported lie at 3.43MB, 3.98MB, 2.9MB, and 7.89MB. We can see in all cases that data consumption did not exceed 10MB and, in most cases, did not even use more than 5MB. We could extrapolate that the consumption of data should not be a lot more than twice, depending on the number of aggregation requests sent because the parallelization of the data collection should always aim for small groups.
 
 \subsection{Results}
 We sent more than a hundred aggregation requests during the field test. We collected the average number of steps taken and the average time spent on the activities still, walking, biking, and in a vehicle. The start and end date parameters for aggregating these types were to 12:00 am JST for each day. We also requested for location and presence of the devices over the globe at 12:00 pm CET and 12:00 pm JST, 11:00 am, and 3:00 am in the GMT zone, respectively. Each aggregation had consistently from 3 to 7 participants.
@@ -47,7 +27,7 @@ We recorded the average time spent motionless was from 577 to around 1106 minute
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=0.8\textwidth]{figures/diagram_still}
-  \caption{Distribution of still raw values.} \label{fig:diagram_still}
+  \caption{Individual and average time spent still each day during the field test.} \label{fig:diagram_still}
 \end{figure}
 
 As for walking, Figure \ref{fig:diagram_walking} shows a mean time between 25 and 75 minutes, from participants only walking 2 minutes up to 158 minutes. Without having the running time at hand, it is possible to infer that with the high number of steps recorded on half of the days, that one person is regularly running if we can assign the steps to the same user.
@@ -55,7 +35,7 @@ As for walking, Figure \ref{fig:diagram_walking} shows a mean time between 25 an
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=0.8\textwidth]{figures/diagram_walking.png}
-  \caption{Distribution of walking raw values.} \label{fig:diagram_walking}
+  \caption{Individual and average time spent walking each day during the field test.} \label{fig:diagram_walking}
 \end{figure}
 
 On average, the participant uses a vehicle for up to 106 minutes. On occasion, many users do not use any transportation at all. Figure \ref{fig:diagram_vehicle} shows the data a user spent in a vehicle. Registered activities from 1 to 2 minutes are with high probability credited to escalators and elevators.  
@@ -63,7 +43,7 @@ On average, the participant uses a vehicle for up to 106 minutes. On occasion, m
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=0.8\textwidth]{figures/diagram_vehicle.png}
-  \caption{Distribution of in vehicle raw values.} \label{fig:diagram_vehicle}
+  \caption{Individual and average time spent in vehicle each day during the field test.} \label{fig:diagram_vehicle}
 \end{figure}
 
 For cycling, on some days, we only had one value of around 7 minutes. We can assume with confidence that it is one specific participant that is using the bike on occasion.
@@ -111,8 +91,6 @@ Now we take a look at the location and presence data. In the Tables \ref{tab:loc
         \hline
         \textbf{Date} & \textbf{Location} & \textbf{\# of Users}\\ [0.5ex] 
         \hline
-        29.01.20 &  & \\ 
-        \hline
         30.01.20 &\textit{suppressed} & 2 \\ 
         & (35.50103138028429, 139.49688751384306) & 2 \\
         \hline
@@ -143,11 +121,11 @@ Now we take a look at the location and presence data. In the Tables \ref{tab:loc
     \label{tab:location_cet}
 \end{table}
 
-According to the aggregated data, we have 2 to 7 participants throughout the field test. Table \ref{tab:location_jst} shows the location at 12 pm JST and Table \ref{tab:location_cet} at 12 pm CET, which corresponds to 4 am CET and 8 pm JST in the other time zone. As already mentioned before, because of the fragmented participant pool, we set the desired location at any GPS coordinates. Still, the range to 50,000km and the accuracy to 0, which results in gives us a rough estimate in a 111km range.
+As already mentioned before, because of the fragmented participant pool, we did not care about the specified GPS coordinates because we set the range to 50,000km and the accuracy to 0, which gives us a tolerance of 111km. According to the aggregated data, we have 2 to 7 participants throughout the field test. Table \ref{tab:location_jst} shows the location at 12 pm JST and Table \ref{tab:location_cet} at 12 pm CET, which corresponds to 4 am CET and 8 pm JST in the other time zone. 
 
-At 12 pm JST or 4 am CET, we have only two devices located in the greater Munich area with a midpoint of \((48.50108260577674, 11.495067909974292)\) which corresponds to the territory covered by \(\langle(48, 11),(49, 12)\rangle\). On the 30th and 31st of January, we detected three devices in the same region and, additionally, 2 participants close to \((35.50103138028429, 139.49688751384306)\) which represents the space between \(\langle(35, 139),(36, 140)\rangle\). For the rest of the field test, we can determine two devices in the general area of Munich and 2 in Tokyo most of the time.
+At 12 pm JST or 4 am CET, we have only two devices located in the greater Munich area with a midpoint of \((48.50108260577674, 11.495067909974292)\) which corresponds to the territory covered by \(\langle(48, 11),(49, 12)\rangle\). On the 30th and 31st of January, we detected three devices in the same region and, additionally, 2 participants close to \((35.50103138028429, 139.49688751384306)\) which represents the space between \(\langle(35, 139),(36, 140)\rangle\). For the rest of the field test, we can determine two devices in the general area of Munich and 2 in Tokyo most of the time. On 29.01.20, 03.02.20, 04.02.20, and 05.02.20 we can also reach a device that we suppress because it does not fulfill our specified k-anonymity parameter of at least 2.
 
-As for the aggregation at 12 pm CET or 8 pm JST, we get similar results with three devices in the greater Munich area and also three devices in the proximity of Tokyo for four days. On the 30.01.20, we only see 2 users the area covered by \(\langle(35, 139),(36, 140)\rangle\) and on the 05.02.20, we only see 2 users between \(\langle(48, 11),(49, 12)\rangle\).
+As for the aggregation at 12 pm CET or 8 pm JST, we get similar results with three devices in the greater Munich area and also three devices in the proximity of Tokyo for four days. On the 30.01.20, we only see 2 users the area covered by \(\langle(35, 139),(36, 140)\rangle\) and on the 05.02.20, we only see 2 users between \(\langle(48, 11),(49, 12)\rangle\). Similar to the data collected at 12 pm JST, we suppress one device that is on its own almost everyday during the testing period.
 
 Figure \ref{fig:acc0} depicts the areas that are spanned by the corner points for Munich and Tokyo. 
 
@@ -156,24 +134,43 @@ Figure \ref{fig:acc0} depicts the areas that are spanned by the corner points fo
   \subfloat[Munich][Munich \(\langle(48, 11),(49, 12)\rangle\)]{\includegraphics[width=0.45\textwidth]{figures/acc0_m}\label{fig:acc0_m}}
   \hfill
   \subfloat[Tokyo][Tokyo \(\langle(35, 139),(36, 140)\rangle\)]{\includegraphics[width=0.45\textwidth]{figures/acc0_t}\label{fig:acc0_t}}
-  \caption{Spatial areas in Tokyo and Munich with an accuracy of 0}
+  \caption{Spatial areas spanned by the cloaking algorithm over Tokyo and Munich with an accuracy of 0.}
   \label{fig:acc0}
 \end{figure}
 
+The aggregation obviously relies on the speed and bandwidth of our participants, but most of our aggregations in regards to steps, activities, and presence data took only a few seconds. The call for location, however, took around 3 minutes most of the time with two outliers at 6 minutes. We accredit this to our bypass function because without confirmation it times out at 3 minutes .
 
 \subsection{Privacy Evaluation}
 After collecting the data, we analyze it for privacy issues. We first put the steps data and activity data under the microscope, and then we tear down the location and presence information. Examining possible reconstruction, linking, or tracing attacks.
 
 \subsubsection{Raw Values of Steps and Activities}
 Looking at the steps and the activities, we do not see any vulnerability in linking attacks as there are not a lot of possible quasi-identifiers to connect. Being able to connect temporal similarities would be a potential vulnerability. Steps data is collected over the whole day, but could also be modified to use a specific time frame instead. However, the issue is that all delivered data from every device has the same time data they get from the request. The same applies to activities. As every query by itself is a statistical database, without any quasi-identifiers, it is improbable to achieve a linking attack. 
-Tracing attacks, however, can be used to identify if a user is used in the query, possibly. Taking the gathered steps data, with auxiliary data as knowing the exact number of steps a person took, we can infer that the person has participated in the aggregation request with a high chance. Nevertheless, because our data collection architecture has a possibility that a person does not provide data, there is plausible deniability. Scaling the number of participants up would result in a normal distribution of the mobility data, as shown by Althoff et al. \cite{inequality}. With a lot of possible users, inferring the participation of one user, even with the ability to match the number of steps to exactly one value in the query result, we are unable to guarantee the user took part. We think we can assure privacy with the raw values, the same as van Endern promised privacy for median values.
+Tracing attacks, however, can be used to identify if a user is used in the query, possibly. Taking the gathered steps data, with auxiliary data as knowing the exact number of steps a person took, we can infer that the person has participated in the aggregation request with a high chance. Nevertheless, because our data collection architecture has a possibility that a person does not provide data, there is plausible deniability. Scaling the number of participants up would result in a normal distribution of the mobility data, as shown by Althoff et al. \cite{inequality}. With a lot of possible users, inferring the participation of one user, even with the ability to match the number of steps to exactly one value in the query result, we are unable to guarantee the user took part. We can assure privacy with the raw values, the same as van Endern promised privacy for median values.
 
 \subsubsection{Location and Presence}
 As for the more specific mobility data, we can not build any connections to the other data with confidence. We are incapable of linking our location or presence to steps or activities without auxiliary data. By suppressing unique locations, that could show individuals, and we have a k-anonymous data set. However, the same problems applys for steps and activities. Missing quasi-identifiers make it hard to re-identify the devices from where the data came. 
 However, in contrast to reconstruction or linking attacks, tracing attacks could be used. Because of the lack of participating devices, we are sure that it is the same people participating in the query. Nevertheless, with low accuracy, we are unable to build any trajectories. To examine the possible calculation of paths, we need more data and more accurate data.
 
 \section{Simulated Test}
-Because of the small sample size in our field test, we decided to run one more test in a more controlled environment for more reliable data. We use 10 Android Emulators on different versions of the operating system using Android Studio. We selected four small landmarks in a small area from which the devices travel from one of the other landmarks as a destination. It will ensure that we have devices that have been alone and together over the test period. For 10 minutes, each device generates location data along a predefined route in an interval of one second, totaling in 600 GPS coordinates. We use the emulator's route simulation, which leverages Google's Map API, giving us a travel speed of exactly 4.5km/h. We then aggregate the location data over the ten minutes for each minute and gather data using different accuracy parameters, giving us different approximate areas. It gives us more data to evaluate privacy issues, especially concerning historical location data.
+Because of the small sample size in our field test, we decided to run one more test in a more controlled environment for more reliable data. We use 10 Android Emulators on different versions of the operating system using Android Studio. We selected four small landmarks in a small area from which the devices travel from one of the other landmarks as a destination. It will ensure that we have devices that have been alone and together over the test period. For 10 minutes, each device generates location data along a predefined route in an interval of one second, totaling in 600 GPS coordinates, which is enough to evaluate the privacy risks to obfuscated location data. We use the emulator's route simulation, which leverages Google's Map API,  travelling at a speed of exactly 4.5km/h, giving us an approximate spatial area of 1km\textsuperscript{2}. We then aggregate the location data over the ten minutes for each minute. We do this for different accuracy parameters. It gives us enough data to evaluate privacy issues, especially concerning historical location data.
+
+In Listing \ref{lst:simulation}, we can see request sent to the server.  
+
+\begin{lstlisting}[caption=Body of an HTTP request starting a new aggregation with the devices., label={lst:simulation}]
+{
+    "username": "admin",
+    "password": "admin",
+    "requestType": "location",
+    "request": {
+        "date": 1582596180000,
+        "accuracy": 4,
+        "anonymity": 2,
+        "lat": 35.535751,
+        "lon": 139.629355,
+        "radius": 10
+    }
+}
+\end{lstlisting}
 
 \subsection{Results}
 First, we chose an accuracy of 2 decimal places, which translates to real-world distances of around one kilometer. We were able to track 7-8 devices consistently in the areas depicted in Figure \ref{fig:acc2}. The markers 1 and 2 span the area of \(\langle(35.54, 139.63),(35.55, 139.64)\rangle\) and the other two markers are \(\langle(35.53, 139.63),(35.54, 139.64)\rangle\). Table \ref{tab:location_sim2} shows how many devices were in which area at each time step. 
@@ -232,7 +229,7 @@ First, we chose an accuracy of 2 decimal places, which translates to real-world 
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=0.5\textwidth]{figures/acc2}
-  \caption{Spatially cloaked areas for an accuracy value of 2} \label{fig:acc2}
+  \caption{Spatial areas spanned by the cloaking algorithm with an accuracy of 0.} \label{fig:acc2}
 \end{figure}
 
 Because the region we specified is vast, we can almost always find multiple devices in the area.
@@ -240,7 +237,7 @@ Because the region we specified is vast, we can almost always find multiple devi
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=0.5\textwidth]{figures/acc3}
-  \caption{Spatially cloaked areas for an accuracy value of 3} \label{fig:acc3}
+  \caption{Spatial areas spanned by the cloaking algorithm with an accuracy of 3.} \label{fig:acc3}
 \end{figure}
 
 For our next aggregation, we selected a precision of 3, which corresponds to roughly 100 meters. The data in Table \ref{tab:location_sim3} reveals that we can find two mobile phones most of the time, with aggregations, in which we were able to find three devices or none at all. The areas are visible in Figure \ref{fig:acc3}.
@@ -324,8 +321,9 @@ Finally, we send requests with an accuracy of 4 or 10 meters. In this scenario, 
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=0.5\textwidth]{figures/acc4}
-  \caption{Spatially cloaked areas for an accuracy value of 4} \label{fig:acc4}
+  \caption{Spatial areas spanned by the cloaking algorithm with an accuracy of 4.} \label{fig:acc4}
 \end{figure}
+With out simulated test we can confirm that our aggregation time of 3 minutes and 6 minutes are due to our bypass function. In this test we don't have any offline devices and aggregation finished in a matter of seconds.
 
 \subsection{Privacy Evaluation}
 Looking at the documented results, we can see where devices meet each other. With low precision, we always register for 3-4 users. Using k-anonymity, we are unable to find out more than the provided data. We only know the number of people present in a specific area. 
@@ -337,7 +335,7 @@ Using an accuracy of 10 meters, we are unable to collect any useful data. The la
 \section{Evaluation}
 We showed that the number of participants is not detrimental to the privacy of the users. As section \ref{sec:field_test} has shown, with the limited number of devices, we are unable to gather additional information from the location data. Moreover, in the other direction, an increase in numbers would only improve privacy, as the crowd always hides the individual inside because of k-anonymity.
 
-We also think that the number of devices will not significantly affect the efficiency of our aggregation. Our algorithm on the server tries to calculate a number for the groups close to the pre-selected minimum, increasing the number of groups while keeping the groups small.
+We also confirm that the number of devices will not significantly affect the efficiency of our aggregation. Our algorithm on the server tries to calculate a number for the groups close to the pre-selected minimum, increasing the number of groups while keeping the groups small. We were able to aggregate data in the same time weather it was 3 devices or 10. We expect that with an increased participant pool aggregation should finish in the similar time.
 
 We implemented the platform as proof of concept. So most parameters in the aggregation are not limited. It is currently possible to use an accuracy of 5, which corresponds to the exact location of a person. As we built the platform under the premise that all parties are trusted, we have not protected the privacy in the intermediate states to the extent it should be. Without further countermeasures, the server can see the exact location of each device, although not yet able to determine the device. However, using historical data, it is possible to create a unique trajectory profile and later link it to the participants.
 
@@ -347,7 +345,7 @@ By stripping away all of the quasi-identifiers, we sacrifice a lot of possible u
 \subsection{Possible Improvements}
 We achieved a lot of scalability and privacy in our implementation, but there are still immediate improvements possible in both the application and the server. For the spatially cloaked location data, our design only applies static accuracy provided by the request itself. It may be possible to send different accuracies of the concealed areas and match them on the server, to get smaller anonymizing regions, while maintaining k-anonymity.
 
-The application should also be tweaked to be able to handle multiple requests at the same time. It is thus making data aggregation, in general, more efficient. The same applies to the server. At the moment, it does not differentiate the messages it receives from the groups. It is forcing researchers to wait for an aggregation to finish before they can send a new request.
+The application should also be tweaked to be able to handle multiple requests at the same time. It is thus making data aggregation, in general, more efficient. The same applies to the server. At the moment, it does not differentiate the messages it receives from the groups. It is forcing requesters to wait for an aggregation to finish before they can send a new request.
 
 As homomorphic encryption is still in its infancy, an alternative method to protect the first participants from the following devices is to add dummy data that the server can remove at the end. This method would hide the primary data added to the aggregation and make it harder for the second device in the chain to determine the real input from the fake.
 

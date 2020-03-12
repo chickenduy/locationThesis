@@ -7,7 +7,7 @@ The following sections describe the implementation and explain the design decisi
 
 \section{Technology Stack}
 
-As our mobile platform, we have to decide between iOS and Android. While iOS has a more up-to-date operating system with 70\% of all of their mobile phones running iOS 13 and 23\% running iOS 12, Android has a much more significant market share with around 74\% compared to Apple's 25\%\cite{android1}\cite{android2}.
+As our mobile platform, we have to decide between iOS and Android. While iOS has a more up-to-date operating system with 70\% of all of their mobile phones running iOS 13 and 23\% running iOS 12, Android has a much more significant market share with around 74\% compared to Apple's 25\% \cite{android1}\cite{android2}.
 
 In terms of available development kits and libraries, both platforms provide plenty of choices. In the end, we choose Android, mainly because of their ease of deployment on devices for test scenarios. As for programming language, we opt for Kotlin instead of Java because of their intuitive syntax and compact and more readable codebase.
 
@@ -41,13 +41,13 @@ We use a REST API based on the JSON data exchange format, and Table \ref{tab:res
         GET /aggregationResult HTTP/1.1 & Retrieves a the results of an aggregation request \\ 
         \hline
   \end{tabularx}
-  \caption{Description of the API endpoints implemented in the server.}
+  \caption{Description and usage of API endpoints shared by the Android application and the server.}
   \label{tab:rest}
 \end{table}
 
-The endpoints require authentication either as a researcher or as a data collecting user. For the researcher, we currently only create admin access by manually entering the username and password into the database. To register as users as participants in the crowd, they have to send their id and their public key, as depicted in Figure \ref{lst:registration}. The server provides the participants with a random password for future authentication for sending the result of their group.
+The endpoints require authentication either as a requester or as a data collecting user. For the requester, we currently only create admin access by manually entering the username and password into the database. To register as users as participants in the crowd, they have to send their id and their public key, as depicted in Figure \ref{lst:registration}. The server provides the participants with a random password for future authentication for sending the result of their group.
 
-\begin{lstlisting}[caption=Registration message sent to the server, label={lst:registration}]
+\begin{lstlisting}[caption=Body of an HTTP request for creating a new user., label={lst:registration}]
     {
         "id": "35e78c9a6072b5e81ac2a5",
         "publicKey": "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCFEpvwtF76IsnmRxaPW7cDbzv4..."
@@ -56,9 +56,9 @@ The endpoints require authentication either as a researcher or as a data collect
 
 \section{Aggregation API}
 
-To start an aggregation, Figure \ref{lst:request} shows the researchers have to send their \textit{username} and \textit{password} for authentication, the \textit{requestType} they want to aggregate and additional search options as \textit{request} depending on \textit{requestType} to the server. Example search options are visualized in the Listings \ref{lst:steps}, \ref{lst:activities}, \ref{lst:locations} and \ref{lst:presence}.
+To start an aggregation, Figure \ref{lst:request} shows the requesters have to send their \textit{username} and \textit{password} for authentication, the \textit{requestType} they want to aggregate and additional search options as \textit{request} depending on \textit{requestType} to the server. Example search options are visualized in the Listings \ref{lst:steps}, \ref{lst:activities}, \ref{lst:locations} and \ref{lst:presence}.
 
-\begin{lstlisting}[caption=Initial aggregation request from researcher, label={lst:request}]
+\begin{lstlisting}[caption=Body of an HTTP request for initiating a new aggregation with the server., label={lst:request}]
 {
     "username": "admin",
     "password": password,
@@ -77,7 +77,7 @@ The following arguments used in the search options are:
     \item \textit{anonymity}: selected k for k-anonymity as integer
 \end{itemize}
 
-\begin{lstlisting}[caption=Search options for steps, label={lst:steps}]
+\begin{lstlisting}[caption=Search options of an HTTP request for steps data., label={lst:steps}]
 {
     "date": 1582945200000,
     "lat": 35.535751,
@@ -86,7 +86,7 @@ The following arguments used in the search options are:
 }
 \end{lstlisting}
 
-\begin{lstlisting}[caption=Search options for activities, label={lst:activities}]
+\begin{lstlisting}[caption=Search options of an HTTP request for activities data, label={lst:activities}]
 {
     "type": 0,
     "start": 1582941600000,
@@ -97,7 +97,7 @@ The following arguments used in the search options are:
 }
 \end{lstlisting}
 
-\begin{lstlisting}[caption=Search options for locations, label={lst:locations}]
+\begin{lstlisting}[caption=Search options of an HTTP request for location data, label={lst:locations}]
 {
     "date": 1582945200000,
     "accuracy": 0,
@@ -108,7 +108,7 @@ The following arguments used in the search options are:
 }
 \end{lstlisting}
 
-\begin{lstlisting}[caption=Search options for presence, label={lst:presence}]
+\begin{lstlisting}[caption=Search options of an HTTP request for presence data, label={lst:presence}]
 {
     "start": 1582941600000,
     "end": 1582945200000,
@@ -121,7 +121,7 @@ The following arguments used in the search options are:
 
 When the server receives an aggregation request of the described form, it will send out a more detailed request to the device groups for data collection. The messages sent to the first mobile phones can be seen in Listing \ref{lst:aggregation}.
 
-\begin{lstlisting}[caption=First aggregation request sent to the groups, label={lst:aggregation}]
+\begin{lstlisting}[caption=Body of an HTTP request starting a new aggregation with the devices., label={lst:aggregation}]
 {
     "to": "35e78c9a6072b5e81ac2a5",
     "data": {
@@ -166,7 +166,7 @@ Because the platform relies on the generation of data from the crowd, the main f
 \begin{figure}[htpb]
   \centering
   \includegraphics[width=0.8\textwidth]{figures/modules}
-  \caption{Overview of the Android architecture} \label{fig:modules}
+  \caption{Architecture with four decoupled main modules con- trolled by the \textit{Background Service}.} \label{fig:modules}
 \end{figure}
 
 On starting up, the application opens into the \textit{Main Activity}, where it asks the users for permission to access location services. On acceptance, the application starts the background services for data collection explained in the next section. It also serves the purpose of displaying stored data. We implement a screen for each type: steps, activities, and GPS. Using van Endern's Android application as a blueprint, we implement the same features to keep our application running behind the scenes. Because of background limitations Android introduced with Android Oreo, we create a non-dismissible notification and display it in the status bar and the notification center. It turns the application into a foreground application, bypassing the limitations set in the newer Android versions. To keep user interaction to a minimum, we enable the application to reopen when it crashes or is closed, and when we reboot it.
@@ -180,36 +180,10 @@ After the users successfully accept all permissions, the \textit{Main Activity} 
 \end{itemize}
 
 \subsection{Aggregation}
-The last part of the background services is the communication module. It is in charge of passing on data from the server or devices to the next target. For this interface, we have several ideas in mind.
- 
-\subsubsection{Peer-to-peer technology}
-Unfortunately, after further investigation, the Textile development kit is not viable in its current state because it is unable to keep the node in Android alive after going into the background or turning off the device screen. It is essential for data collection and aggregation to keep communication channels available throughout the whole lifetime of the application.
-
-Thus, we opted instead to use a third-party push notification service as an intermediary to forward the messages between the server and other devices.
+The last part of the background services is the communication module. It is in charge of passing on data from the server or devices to the next target using the push service specified in out design in Chapter \ref{chapter:design}.
 
 \subsubsection{Push}
-To replace Simon van Ender's polling with an event-based action architecture, Figure \ref{fig:ar2} shows our new modified design. For our push service, we select Pushy \cite{pushy} because of their free entry barrier and independence from big tech companies, as well as having implementations for both iOS and Android. Additionally, Pushy makes use of MQTT \cite{mqtt}, a light-weight messaging protocol that uses a small amount of bandwidth. We could also have used Firebase Cloud Messaging to forward messages, but giving Google more data to work is what we are trying to avoid. Of course, the modular architecture of the app enables us to swap this method of communication for a peer-to-peer solution as soon as one proves applicable.
-
-\begin{figure}[htbp]
-  \centering
-  \includegraphics[width=0.8\textwidth]{figures/ar2}
-  \caption{Data flow of an aggregation inside a group} \label{fig:ar2}
-\end{figure}
-
-\begin{enumerate}
-    \item The researcher sends aggregation request to a central server
-    \item The server sends request push service
-    \item The push service forwards request to the first device
-    \item The device adds data and sends results to push service targeting next device
-    \item Push service forwards request to next device
-    \item The device adds data and sends results to push service targeting next device
-    \item The device sends a confirmation message to push service targeting previous device
-    \item Push service forwards confirmation to the previous device
-    \item Push service forwards request to next device and repeat until the last device
-    \item The last device adds data and sends results back to the server.
-    \item The last device sends a confirmation message to push service targeting previous device
-    \item Push service forwards confirmation to the previous device
-\end{enumerate}
+For our forwarding service, we select Pushy \cite{pushy} because of their free entry barrier and independence from big tech companies, as well as having implementations for both iOS and Android. Additionally, Pushy makes use of MQTT \cite{mqtt}, a light-weight messaging protocol that uses a small amount of bandwidth. We could also have used Firebase Cloud Messaging to forward messages, but giving Google more data to work is what we are trying to avoid.   Of course, the modular architecture of the app enables us to swap this method of communication for a peer-to-peer solution as soon as one proves applicable.
 
 The communication service, communication receiver, and communication handler manage the complete communication infrastructure. After starting the application, the \textit{Background Service} creates the communication service that registers the device to the push service and receives a token as identification. Then it generates an asymmetric RSA key pair and registers itself to our platform with the Pushy token as \textit{id} and the \textit{publicKey} over the REST API. As a reply, the mobile phone receives a random password for future authentication purposes mentioned previously.
 
@@ -223,6 +197,9 @@ The communication receiver works as the entry point for push notifications from 
 
 After that, the communication handler takes the message and prepares it for the next participant in the \textit{group} array encoded in \textit{requestOptions}. If the device was the last in the list, it sends the results back to the server; otherwise, it uses the hybrid encryption scheme to encrypt data with the credentials of the subsequent device. So the current device generates a symmetric AES key and encrypts the \textit{data} and afterward does the same to the symmetric key using the public RSA key of the selected participant. Next, the communication handler forwards it over the push service, which in turn sends a push notification to the specified mobile phone. This repeats in each group until it chooses the last device.
 
+\subsubsection{Spatial Cloaking}
+Our version of interval cloaking creates rectangular areas by rounding digits. After receiving a request coordinates, the device select the closest entry to the specified \textit{date} and obfuscate it using the \textit{accuracy} parameter provided in the aggregation request. For example, the GPS coordinates \((48.262531, 11.668090)\) will be cloaked in the area with the coordinates \(\langle(48.26, 11.66),(48.27, 11.67)\rangle\), when using an accuracy of 2. We then use the haversine formula to calculate the midpoint of the two corner points as a representative for the cloaked space. 
+
 \subsubsection{Bypassing inactive users in the aggregation chain}
 In the case, that the aggregation is stuck because of any reason, for instance, a device does not have an internet connection, it is turned off, or the participant deleted the application, we have to be able to bypass the inactive mobile phone and select a new one.
 
@@ -232,16 +209,13 @@ So after the users forward their encrypted results to the following device, they
 
 By avoiding offline devices and actively confirming that a fulfilled request, we can bypass inactive users and make the aggregation more efficient and reliable.
 
-\subsubsection{Spatial Cloaking}
-We select a variant of the Interval Cloaking algorithm by rounding down and rounding up the digit after the comma defined in \textit{accuracy} in the \textit{requestData} to create a rectangular area. To conserve data, we calculate the midpoint between the left lower corner and right upper corner of the area as a representative. It is important to find a good value for \textit{accuracy} because a high value results in a lot of suppression and a low value in generalized data. 
-
 \section{Server}
 For our server, we are using Node.js, on version 12.12.21 with the express \cite{express} middleware, a minimal web application framework. Our MongoDB Atlas database instance receives data over the database communication module. We can see the architecture in Figure \ref{fig:server}.
 
 \begin{figure}[htpb]
   \centering
   \includegraphics[width=0.5\textwidth]{figures/server}
-  \caption{Overview of the server architecture} \label{fig:server}
+  \caption{Modular architecture of the server seperated by communication type.} \label{fig:server}
 \end{figure}
 
 As our programming language, we select Typescript because of its versatility. As a superset of Javascript, it supports all Javascript libraries natively and allows for object-oriented programming paradigms. Also, it provides optional static typing and better code structure. However, to run the server, we transpile our Typescript code to Javascript code to run the webserver.
@@ -252,7 +226,7 @@ When we start the server, \textit{app.ts} registers the routes described in Tabl
 Upon starting the application, it registers to the server using the JSON shown in Listing \ref{lst:registration} over the \textit{/crowd} route. To update the latest timestamp, we also have an obsolete route \textit{/crowd/ping}, which has been replaced with the ping our push notification service already provides. However, this route can be modified to ping the devices for their current status if another communication model is adapted.
 
 \subsection{Aggregation}
-We create one route to which the researchers can send their aggregation requests. After receiving a JSON in the mentioned form in the Listing \ref{lst:request} in route \textit{/aggregationRequest}, the server will get all the devices, ping them using the push service, select all the available participants and calculate the groups. Before assigning the groups, we use the Fisher-Yates shuffle to mix the order of the users. We calculate group sizes depending on a designated minimal length, so the aggregation has enough members in each group for anonymity purposes, but small enough to stay efficient. After all that, the server sends the aggregation request to all groups using the push service.
+We create one route to which the requesters can send their aggregation requests. After receiving a JSON in the mentioned form in the Listing \ref{lst:request} in route \textit{/aggregationRequest}, the server will get all the devices, ping them using the push service, select all the available participants and calculate the groups. Before assigning the groups, we use the Fisher-Yates shuffle to mix the order of the users. We calculate group sizes depending on a designated minimal length, so the aggregation has enough members in each group for anonymity purposes, but small enough to stay efficient. After all that, the server sends the aggregation request to all groups using the push service.
 
 On request creation, the server creates a temporary aggregation object that stores the id, number of groups, and how many it already has received. We have four additional routes for the final aggregation, \textit{/aggregationsteps}, \textit{/aggregationactivity}, \textit{/aggregationlocation} and \textit{/aggregationpresence}. They each manage the POST requests from the Android devices and calculate data or ensure anonymity.
 
@@ -264,6 +238,6 @@ Even with the proposed solutions, the architecture is still far from perfect. Wh
 
 With van Endern's aggregation chain, the most vulnerable participants would be the first ones because the next user in line would always be able to see the raw data that the first users added. In our version, each group exposes the data of the first participant to the second. Unfortunately, homomorphic encryption is still expensive, and there are currently no available libraries for Android that implement it.
 
-Our spatial cloaking algorithm is also flawed. Interval cloaking has the disadvantage that the coordinates predetermine the cloaked areas. It might not group participants together, although they are close in proximity  because they are standing in different spatial regions.
+Our spatial cloaking algorithm is also imperfect. Interval cloaking has the disadvantage that the coordinates predetermine the cloaked areas. It might not group participants together, although they are close in proximity  because they are standing in different spatial regions.
 
 Another issue that can lead to privacy issues is centralization. While the raw data itself is distributed, the control over aggregated data, its storage, and its collection is still under one central authority.
